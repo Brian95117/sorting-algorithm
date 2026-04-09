@@ -7,245 +7,302 @@
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      font-family: "Arial", "Microsoft JhengHei", sans-serif;
-      background: linear-gradient(135deg, #eef2ff 0%, #f8fbff 50%, #eefaf5 100%);
-      color: #1f2937;
+      margin: 0;
+      font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+      background:
+        radial-gradient(circle at top left, #1e3a8a 0%, transparent 28%),
+        radial-gradient(circle at top right, #065f46 0%, transparent 22%),
+        linear-gradient(135deg, #0f172a, #111827 45%, #1f2937);
+      color: #e5e7eb;
       min-height: 100vh;
     }
 
     .wrapper {
-      max-width: 1200px;
+      max-width: 1300px;
       margin: 0 auto;
-      padding: 40px 20px 60px;
+      padding: 32px 20px 48px;
     }
 
     .hero {
       text-align: center;
-      padding: 60px 20px 40px;
+      margin-bottom: 28px;
     }
 
-    .hero .badge {
+    .badge {
       display: inline-block;
-      background: #ffffffcc;
-      color: #2563eb;
-      border: 1px solid #dbeafe;
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 999px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(96, 165, 250, 0.35);
+      color: #93c5fd;
       font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+      margin-bottom: 18px;
     }
 
-    .hero h1 {
-      font-size: 48px;
-      line-height: 1.2;
-      margin-bottom: 18px;
-      color: #111827;
+    h1 {
+      margin: 0 0 12px;
+      font-size: 44px;
+      color: #f9fafb;
     }
 
     .hero p {
-      max-width: 760px;
       margin: 0 auto;
-      font-size: 18px;
+      max-width: 800px;
+      color: #cbd5e1;
+      font-size: 17px;
       line-height: 1.8;
-      color: #4b5563;
     }
 
-    .hero-buttons {
-      margin-top: 28px;
+    .panel {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+      margin-bottom: 24px;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .control-group {
       display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .btn {
-      display: inline-block;
-      text-decoration: none;
-      padding: 12px 22px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: bold;
-      transition: all 0.25s ease;
+    .control-group label {
+      font-size: 14px;
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    select,
+    input[type="range"] {
+      width: 100%;
+    }
+
+    select {
+      border: none;
+      outline: none;
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #111827;
+      font-size: 15px;
+    }
+
+    .range-value {
+      font-size: 13px;
+      color: #93c5fd;
+      font-weight: 700;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    button {
+      border: none;
+      outline: none;
+      border-radius: 14px;
+      padding: 12px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, opacity 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.96;
     }
 
     .btn-primary {
-      background: #2563eb;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
       color: white;
-      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.22);
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      background: #1d4ed8;
+    .btn-success {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      box-shadow: 0 10px 24px rgba(16, 185, 129, 0.28);
+    }
+
+    .btn-warning {
+      background: linear-gradient(135deg, #d97706, #f59e0b);
+      color: white;
     }
 
     .btn-secondary {
-      background: white;
-      color: #1f2937;
-      border: 1px solid #d1d5db;
+      background: rgba(255, 255, 255, 0.12);
+      color: #f3f4f6;
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
-    .btn-secondary:hover {
-      transform: translateY(-2px);
-      border-color: #9ca3af;
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: 30px;
-      margin: 30px 0 12px;
-      color: #111827;
-    }
-
-    .section-subtitle {
-      text-align: center;
-      color: #6b7280;
-      font-size: 16px;
-      margin-bottom: 36px;
-    }
-
-    .summary {
+    .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
-      margin: 20px 0 60px;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
     }
 
-    .summary-card {
-      background: rgba(255, 255, 255, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-      backdrop-filter: blur(10px);
+    .stat-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 18px;
     }
 
-    .summary-card h3 {
-      font-size: 16px;
-      margin-bottom: 8px;
-      color: #374151;
-    }
-
-    .summary-card p {
-      font-size: 28px;
-      font-weight: bold;
-      color: #111827;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 22px;
-    }
-
-    .card {
-      text-decoration: none;
-      color: inherit;
-      background: rgba(255, 255, 255, 0.88);
-      border: 1px solid rgba(255, 255, 255, 0.85);
-      border-radius: 24px;
-      padding: 26px 24px;
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      top: -40px;
-      right: -40px;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: rgba(37, 99, 235, 0.08);
-    }
-
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.14);
-    }
-
-    .icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      margin-bottom: 18px;
-      background: linear-gradient(135deg, #dbeafe, #e0f2fe);
-    }
-
-    .card h2 {
-      font-size: 22px;
-      margin-bottom: 10px;
-      color: #111827;
-      position: relative;
-      z-index: 1;
-    }
-
-    .card p {
-      font-size: 15px;
-      line-height: 1.7;
-      color: #4b5563;
-      margin-bottom: 16px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      color: #6b7280;
-      position: relative;
-      z-index: 1;
-    }
-
-    .tag {
-      background: #eff6ff;
-      color: #2563eb;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-weight: bold;
+    .stat-card h3 {
+      margin: 0 0 8px;
       font-size: 13px;
+      color: #94a3b8;
+      font-weight: 600;
     }
 
-    .footer {
-      margin-top: 70px;
-      text-align: center;
-      color: #6b7280;
+    .stat-card p {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .stat-card.status p {
+      font-size: 18px;
+      line-height: 1.5;
+      color: #93c5fd;
+    }
+
+    .visual-panel {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 28px;
+      padding: 26px 20px 20px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.26);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 16px;
+      color: #cbd5e1;
       font-size: 14px;
-      line-height: 1.8;
     }
 
-    @media (max-width: 768px) {
-      .hero {
-        padding-top: 36px;
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-color {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+    }
+
+    .canvas {
+      height: 480px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 4px;
+      padding: 18px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar {
+      flex: 1;
+      min-width: 8px;
+      max-width: 28px;
+      border-radius: 10px 10px 0 0;
+      background: linear-gradient(180deg, #60a5fa, #2563eb);
+      transition: height 0.16s ease, transform 0.16s ease, opacity 0.16s ease;
+      position: relative;
+    }
+
+    .bar.active {
+      background: linear-gradient(180deg, #f97316, #ef4444);
+      transform: scaleY(1.02);
+    }
+
+    .bar.compare {
+      background: linear-gradient(180deg, #facc15, #eab308);
+    }
+
+    .bar.sorted {
+      background: linear-gradient(180deg, #34d399, #10b981);
+    }
+
+    .bar.pivot {
+      background: linear-gradient(180deg, #f472b6, #ec4899);
+    }
+
+    .bar span {
+      position: absolute;
+      bottom: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      color: #94a3b8;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .controls-grid,
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
       }
 
-      .hero h1 {
+      h1 {
         font-size: 34px;
       }
 
-      .hero p {
-        font-size: 16px;
+      .canvas {
+        height: 380px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .controls-grid,
+      .stats {
+        grid-template-columns: 1fr;
       }
 
-      .section-title {
-        font-size: 26px;
+      .btn-row {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .canvas {
+        height: 320px;
+        gap: 2px;
       }
     }
   </style>
@@ -253,121 +310,363 @@
 <body>
   <div class="wrapper">
     <section class="hero">
-      <div class="badge">Sorting Algorithm Project</div>
-      <h1>排序演算法視覺化展示</h1>
+      <div class="badge">Interactive Sorting Algorithm Visualizer</div>
+      <h1>排序演算法互動視覺化</h1>
       <p>
-        這個網站整理了多種常見排序法的互動式演示頁面，
-        透過動畫方式呈現資料比較、交換與遞迴分割的過程，
-        幫助使用者更直觀理解各種排序演算法的核心概念與效能差異。
+        可調整資料量、速度、排序法，並即時觀察比較、交換與排序完成的過程。
+        這不是單純展示頁，而是可以操作的互動式演算法模擬器。
       </p>
+    </section>
 
-      <div class="hero-buttons">
-        <a class="btn btn-primary" href="bubble.html">開始體驗</a>
-        <a class="btn btn-secondary" href="README.md">查看 README</a>
+    <section class="panel">
+      <div class="controls-grid">
+        <div class="control-group">
+          <label for="algorithm">排序法</label>
+          <select id="algorithm">
+            <option value="bubble">Bubble Sort</option>
+            <option value="selection">Selection Sort</option>
+            <option value="insertion">Insertion Sort</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="sizeRange">資料數量</label>
+          <input type="range" id="sizeRange" min="10" max="60" value="30" />
+          <div class="range-value">目前：<span id="sizeValue">30</span></div>
+        </div>
+
+        <div class="control-group">
+          <label for="speedRange">動畫速度</label>
+          <input type="range" id="speedRange" min="10" max="300" value="80" />
+          <div class="range-value">延遲：<span id="speedValue">80</span> ms</div>
+        </div>
+
+        <div class="control-group">
+          <label>目前模式</label>
+          <div class="range-value" id="modeText">可互動操作</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" id="generateBtn">重新產生資料</button>
+        <button class="btn-success" id="startBtn">開始排序</button>
+        <button class="btn-warning" id="pauseBtn">暫停</button>
+        <button class="btn-secondary" id="resumeBtn">繼續</button>
+        <button class="btn-secondary" id="resetBtn">重設統計</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <h3>比較次數</h3>
+          <p id="compareCount">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>交換次數</h3>
+          <p id="swapCount">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>資料筆數</h3>
+          <p id="itemCount">30</p>
+        </div>
+        <div class="stat-card status">
+          <h3>狀態</h3>
+          <p id="statusText">等待開始</p>
+        </div>
       </div>
     </section>
 
-    <h2 class="section-title">專題總覽</h2>
-    <p class="section-subtitle">以互動動畫方式展示經典排序演算法</p>
+    <section class="visual-panel">
+      <div class="legend">
+        <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span>未排序</div>
+        <div class="legend-item"><span class="legend-color" style="background:#eab308;"></span>比較中</div>
+        <div class="legend-item"><span class="legend-color" style="background:#ef4444;"></span>交換 / 作用中</div>
+        <div class="legend-item"><span class="legend-color" style="background:#10b981;"></span>已排序</div>
+      </div>
 
-    <section class="summary">
-      <div class="summary-card">
-        <h3>演算法數量</h3>
-        <p>5 種</p>
-      </div>
-      <div class="summary-card">
-        <h3>展示方式</h3>
-        <p>HTML 動畫</p>
-      </div>
-      <div class="summary-card">
-        <h3>適用對象</h3>
-        <p>學習 / 教學</p>
-      </div>
-      <div class="summary-card">
-        <h3>專題特色</h3>
-        <p>可互動操作</p>
-      </div>
+      <div class="canvas" id="canvas"></div>
+      <div class="footer-note">提示：先改資料量和速度，再按「開始排序」體驗最佳。</div>
     </section>
-
-    <h2 class="section-title">演算法列表</h2>
-    <p class="section-subtitle">點擊下方卡片即可進入各排序法的動畫展示頁</p>
-
-    <section class="grid">
-      <a class="card" href="bubble.html">
-        <div class="icon">🫧</div>
-        <h2>Bubble Sort</h2>
-        <p>
-          透過相鄰元素逐一比較與交換，
-          讓較大的值慢慢移動到序列尾端，
-          是最容易理解的基礎排序法之一。
-        </p>
-        <div class="meta">
-          <span class="tag">O(n²)</span>
-          <span>相鄰交換</span>
-        </div>
-      </a>
-
-      <a class="card" href="selection.html">
-        <div class="icon">🎯</div>
-        <h2>Selection Sort</h2>
-        <p>
-          每一輪從未排序區間中選出最小值，
-          再放到前方正確位置，
-          適合用來理解「選擇最值」的概念。
-        </p>
-        <div class="meta">
-          <span class="tag">O(n²)</span>
-          <span>選最小值</span>
-        </div>
-      </a>
-
-      <a class="card" href="insertion.html">
-        <div class="icon">📥</div>
-        <h2>Insertion Sort</h2>
-        <p>
-          將新元素插入前方已排序區間中的適當位置，
-          很像整理撲克牌的方式，
-          是實用且直觀的排序方法。
-        </p>
-        <div class="meta">
-          <span class="tag">O(n²)</span>
-          <span>插入排序</span>
-        </div>
-      </a>
-
-      <a class="card" href="merge.html">
-        <div class="icon">🧩</div>
-        <h2>Merge Sort</h2>
-        <p>
-          先將資料分割成更小區塊，
-          排序後再逐步合併，
-          屬於典型的 Divide and Conquer 演算法。
-        </p>
-        <div class="meta">
-          <span class="tag">O(n log n)</span>
-          <span>分割合併</span>
-        </div>
-      </a>
-
-      <a class="card" href="quick.html">
-        <div class="icon">⚡</div>
-        <h2>Quick Sort</h2>
-        <p>
-          透過 pivot 將資料分成左右兩側，
-          再遞迴排序，
-          平均情況下是非常高效率的經典排序法。
-        </p>
-        <div class="meta">
-          <span class="tag">O(n log n)</span>
-          <span>Pivot 分區</span>
-        </div>
-      </a>
-    </section>
-
-    <footer class="footer">
-      <p>Sorting Algorithm Visualizer</p>
-      <p>使用 HTML / CSS / JavaScript 製作的排序演算法展示專題</p>
-    </footer>
   </div>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const algorithmSelect = document.getElementById("algorithm");
+    const sizeRange = document.getElementById("sizeRange");
+    const speedRange = document.getElementById("speedRange");
+    const sizeValue = document.getElementById("sizeValue");
+    const speedValue = document.getElementById("speedValue");
+    const modeText = document.getElementById("modeText");
+
+    const compareCountEl = document.getElementById("compareCount");
+    const swapCountEl = document.getElementById("swapCount");
+    const itemCountEl = document.getElementById("itemCount");
+    const statusText = document.getElementById("statusText");
+
+    const generateBtn = document.getElementById("generateBtn");
+    const startBtn = document.getElementById("startBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const resumeBtn = document.getElementById("resumeBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    let values = [];
+    let compareCount = 0;
+    let swapCount = 0;
+    let isSorting = false;
+    let isPaused = false;
+    let stopRequested = false;
+
+    function randomValue() {
+      return Math.floor(Math.random() * 360) + 20;
+    }
+
+    function updateCounters() {
+      compareCountEl.textContent = compareCount;
+      swapCountEl.textContent = swapCount;
+      itemCountEl.textContent = values.length;
+    }
+
+    function updateStatus(text) {
+      statusText.textContent = text;
+    }
+
+    function getDelay() {
+      return Number(speedRange.value);
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function waitWhilePaused() {
+      while (isPaused) {
+        await sleep(60);
+      }
+    }
+
+    function renderBars(active = [], compare = [], sorted = []) {
+      canvas.innerHTML = "";
+      const showLabels = values.length <= 20;
+
+      values.forEach((value, index) => {
+        const bar = document.createElement("div");
+        bar.className = "bar";
+        bar.style.height = `${value}px`;
+
+        if (sorted.includes(index)) bar.classList.add("sorted");
+        if (compare.includes(index)) bar.classList.add("compare");
+        if (active.includes(index)) bar.classList.add("active");
+
+        if (showLabels) {
+          const label = document.createElement("span");
+          label.textContent = value;
+          bar.appendChild(label);
+        }
+
+        canvas.appendChild(bar);
+      });
+    }
+
+    function generateData() {
+      if (isSorting) return;
+      const size = Number(sizeRange.value);
+      values = Array.from({ length: size }, randomValue);
+      updateCounters();
+      renderBars();
+      updateStatus("已產生新資料");
+    }
+
+    function resetStats() {
+      if (isSorting) return;
+      compareCount = 0;
+      swapCount = 0;
+      updateCounters();
+      updateStatus("統計已重設");
+    }
+
+    async function bubbleSort() {
+      const sorted = [];
+      for (let i = 0; i < values.length; i++) {
+        for (let j = 0; j < values.length - i - 1; j++) {
+          if (stopRequested) return;
+          await waitWhilePaused();
+
+          compareCount++;
+          updateCounters();
+          updateStatus(`Bubble Sort：比較 index ${j} 和 ${j + 1}`);
+          renderBars([], [j, j + 1], sorted);
+          await sleep(getDelay());
+
+          if (values[j] > values[j + 1]) {
+            swapCount++;
+            [values[j], values[j + 1]] = [values[j + 1], values[j]];
+            updateCounters();
+            updateStatus(`Bubble Sort：交換 index ${j} 和 ${j + 1}`);
+            renderBars([j, j + 1], [], sorted);
+            await sleep(getDelay());
+          }
+        }
+        sorted.unshift(values.length - i - 1);
+        renderBars([], [], sorted);
+      }
+    }
+
+    async function selectionSort() {
+      const sorted = [];
+      for (let i = 0; i < values.length; i++) {
+        let minIndex = i;
+        for (let j = i + 1; j < values.length; j++) {
+          if (stopRequested) return;
+          await waitWhilePaused();
+
+          compareCount++;
+          updateCounters();
+          updateStatus(`Selection Sort：比較最小值 index ${minIndex} 與 index ${j}`);
+          renderBars([minIndex], [j], sorted);
+          await sleep(getDelay());
+
+          if (values[j] < values[minIndex]) {
+            minIndex = j;
+            renderBars([minIndex], [], sorted);
+            await sleep(Math.max(30, getDelay() / 2));
+          }
+        }
+
+        if (minIndex !== i) {
+          swapCount++;
+          [values[i], values[minIndex]] = [values[minIndex], values[i]];
+          updateCounters();
+          updateStatus(`Selection Sort：將最小值放到位置 ${i}`);
+          renderBars([i, minIndex], [], sorted);
+          await sleep(getDelay());
+        }
+
+        sorted.push(i);
+        renderBars([], [], sorted);
+      }
+    }
+
+    async function insertionSort() {
+      const sorted = [0];
+      renderBars([], [], sorted);
+
+      for (let i = 1; i < values.length; i++) {
+        let key = values[i];
+        let j = i - 1;
+
+        if (stopRequested) return;
+        await waitWhilePaused();
+
+        updateStatus(`Insertion Sort：插入第 ${i + 1} 個元素`);
+        renderBars([i], [], sorted);
+        await sleep(getDelay());
+
+        while (j >= 0 && values[j] > key) {
+          if (stopRequested) return;
+          await waitWhilePaused();
+
+          compareCount++;
+          swapCount++;
+          values[j + 1] = values[j];
+          updateCounters();
+          renderBars([j + 1], [j], sorted);
+          updateStatus(`Insertion Sort：右移 index ${j}`);
+          await sleep(getDelay());
+          j--;
+        }
+
+        if (j >= 0) {
+          compareCount++;
+          updateCounters();
+        }
+
+        values[j + 1] = key;
+        sorted.push(i);
+        renderBars([j + 1], [], [...Array(i + 1).keys()]);
+        await sleep(getDelay());
+      }
+    }
+
+    async function startSorting() {
+      if (isSorting) return;
+
+      isSorting = true;
+      isPaused = false;
+      stopRequested = false;
+      compareCount = 0;
+      swapCount = 0;
+      updateCounters();
+
+      const algorithm = algorithmSelect.value;
+      modeText.textContent = `${algorithm.toUpperCase()} 執行中`;
+      updateStatus("開始排序");
+
+      try {
+        if (algorithm === "bubble") {
+          await bubbleSort();
+        } else if (algorithm === "selection") {
+          await selectionSort();
+        } else if (algorithm === "insertion") {
+          await insertionSort();
+        }
+
+        if (!stopRequested) {
+          renderBars([], [], [...Array(values.length).keys()]);
+          updateStatus("排序完成");
+        } else {
+          updateStatus("排序已中止");
+        }
+      } finally {
+        isSorting = false;
+        isPaused = false;
+        modeText.textContent = "可互動操作";
+      }
+    }
+
+    function pauseSorting() {
+      if (!isSorting) return;
+      isPaused = true;
+      updateStatus("已暫停");
+    }
+
+    function resumeSorting() {
+      if (!isSorting) return;
+      isPaused = false;
+      updateStatus("繼續排序中");
+    }
+
+    function stopAndReset() {
+      if (isSorting) {
+        stopRequested = true;
+        isPaused = false;
+      }
+      compareCount = 0;
+      swapCount = 0;
+      updateCounters();
+      generateData();
+      modeText.textContent = "可互動操作";
+    }
+
+    sizeRange.addEventListener("input", () => {
+      sizeValue.textContent = sizeRange.value;
+      itemCountEl.textContent = sizeRange.value;
+      generateData();
+    });
+
+    speedRange.addEventListener("input", () => {
+      speedValue.textContent = speedRange.value;
+    });
+
+    algorithmSelect.addEventListener("change", () => {
+      updateStatus(`已切換為 ${algorithmSelect.options[algorithmSelect.selectedIndex].text}`);
+    });
+
+    generateBtn.addEventListener("click", generateData);
+    startBtn.addEventListener("click", startSorting);
+    pauseBtn.addEventListener("click", pauseSorting);
+    resumeBtn.addEventListener("click", resumeSorting);
+    resetBtn.addEventListener("click", stopAndReset);
+
+    generateData();
+  </script>
 </body>
 </html>
