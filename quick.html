@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Sort Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 30px;
+      background: #f5f7fb;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .info {
+      max-width: 800px;
+      margin: 0 auto 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+
+    .controls {
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 10px 18px;
+      margin: 0 8px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .generate-btn {
+      background: #3498db;
+      color: white;
+    }
+
+    .start-btn {
+      background: #2ecc71;
+      color: white;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      height: 420px;
+      margin: 30px auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 4px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .bar {
+      width: 20px;
+      background: #5b8def;
+      transition: height 0.25s ease, background 0.25s ease;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .active {
+      background: #e74c3c !important;
+    }
+
+    .pivot {
+      background: #f39c12 !important;
+    }
+
+    .done {
+      background: #2ecc71 !important;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Quick Sort 視覺化演示</h1>
+
+  <div class="info">
+    <p><strong>原理：</strong>選一個 pivot，將資料分成比它小和比它大的兩部分，再遞迴排序。</p>
+    <p><strong>時間複雜度：</strong>Best: O(n log n), Average: O(n log n), Worst: O(n²)</p>
+  </div>
+
+  <div class="controls">
+    <button class="generate-btn" onclick="generateBars()">重新產生資料</button>
+    <button class="start-btn" onclick="startQuickSort()">開始排序</button>
+  </div>
+
+  <div class="container" id="container"></div>
+
+  <a href="index.html">← 回首頁</a>
+
+  <script>
+    const container = document.getElementById("container");
+    let values = [];
+    let isSorting = false;
+
+    function generateBars() {
+      if (isSorting) return;
+      container.innerHTML = "";
+      values = [];
+
+      for (let i = 0; i < 30; i++) {
+        const value = Math.floor(Math.random() * 350) + 20;
+        values.push(value);
+
+        const bar = document.createElement("div");
+        bar.classList.add("bar");
+        bar.style.height = `${value}px`;
+        container.appendChild(bar);
+      }
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function refreshBars(active = [], pivot = -1, finished = []) {
+      const bars = document.getElementsByClassName("bar");
+
+      for (let i = 0; i < bars.length; i++) {
+        bars[i].style.height = `${values[i]}px`;
+        bars[i].classList.remove("active", "pivot", "done");
+
+        if (active.includes(i)) bars[i].classList.add("active");
+        if (i === pivot) bars[i].classList.add("pivot");
+        if (finished.includes(i)) bars[i].classList.add("done");
+      }
+    }
+
+    async function partition(low, high, finished) {
+      let pivotValue = values[high];
+      let i = low - 1;
+
+      refreshBars([], high, finished);
+      await sleep(200);
+
+      for (let j = low; j < high; j++) {
+        refreshBars([j], high, finished);
+        await sleep(120);
+
+        if (values[j] < pivotValue) {
+          i++;
+          [values[i], values[j]] = [values[j], values[i]];
+          refreshBars([i, j], high, finished);
+          await sleep(120);
+        }
+      }
+
+      [values[i + 1], values[high]] = [values[high], values[i + 1]];
+      refreshBars([i + 1], i + 1, finished);
+      await sleep(150);
+
+      return i + 1;
+    }
+
+    async function quickSort(low, high, finished) {
+      if (low < high) {
+        const pi = await partition(low, high, finished);
+        finished.push(pi);
+
+        await quickSort(low, pi - 1, finished);
+        await quickSort(pi + 1, high, finished);
+      } else if (low === high) {
+        if (!finished.includes(low)) finished.push(low);
+      }
+    }
+
+    async function startQuickSort() {
+      if (isSorting) return;
+      isSorting = true;
+
+      const finished = [];
+      await quickSort(0, values.length - 1, finished);
+      refreshBars([], -1, [...Array(values.length).keys()]);
+
+      isSorting = false;
+    }
+
+    generateBars();
+  </script>
+</body>
+</html>

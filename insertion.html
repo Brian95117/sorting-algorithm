@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Insertion Sort Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 30px;
+      background: #f5f7fb;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .info {
+      max-width: 800px;
+      margin: 0 auto 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+
+    .controls {
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 10px 18px;
+      margin: 0 8px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .generate-btn {
+      background: #3498db;
+      color: white;
+    }
+
+    .start-btn {
+      background: #2ecc71;
+      color: white;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      height: 420px;
+      margin: 30px auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 4px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .bar {
+      width: 20px;
+      background: #5b8def;
+      transition: height 0.25s ease, background 0.25s ease;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .active {
+      background: #e74c3c !important;
+    }
+
+    .sorted {
+      background: #2ecc71 !important;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Insertion Sort 視覺化演示</h1>
+
+  <div class="info">
+    <p><strong>原理：</strong>將元素逐一插入左側已排序區間，直到整列完成排序。</p>
+    <p><strong>時間複雜度：</strong>Best: O(n), Average: O(n²), Worst: O(n²)</p>
+  </div>
+
+  <div class="controls">
+    <button class="generate-btn" onclick="generateBars()">重新產生資料</button>
+    <button class="start-btn" onclick="insertionSort()">開始排序</button>
+  </div>
+
+  <div class="container" id="container"></div>
+
+  <a href="index.html">← 回首頁</a>
+
+  <script>
+    const container = document.getElementById("container");
+    let values = [];
+    let isSorting = false;
+
+    function generateBars() {
+      if (isSorting) return;
+      container.innerHTML = "";
+      values = [];
+
+      for (let i = 0; i < 30; i++) {
+        const value = Math.floor(Math.random() * 350) + 20;
+        values.push(value);
+
+        const bar = document.createElement("div");
+        bar.classList.add("bar");
+        bar.style.height = `${value}px`;
+        container.appendChild(bar);
+      }
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function insertionSort() {
+      if (isSorting) return;
+      isSorting = true;
+
+      const bars = document.getElementsByClassName("bar");
+      bars[0].classList.add("sorted");
+
+      for (let i = 1; i < values.length; i++) {
+        let key = values[i];
+        let j = i - 1;
+
+        bars[i].classList.add("active");
+        await sleep(150);
+
+        while (j >= 0 && values[j] > key) {
+          bars[j].classList.add("active");
+          values[j + 1] = values[j];
+          bars[j + 1].style.height = `${values[j + 1]}px`;
+          await sleep(120);
+          bars[j].classList.remove("active");
+          j--;
+        }
+
+        values[j + 1] = key;
+        bars[j + 1].style.height = `${key}px`;
+
+        for (let k = 0; k <= i; k++) {
+          bars[k].classList.add("sorted");
+          bars[k].classList.remove("active");
+        }
+      }
+
+      isSorting = false;
+    }
+
+    generateBars();
+  </script>
+</body>
+</html>

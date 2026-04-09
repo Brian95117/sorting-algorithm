@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Merge Sort Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 30px;
+      background: #f5f7fb;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .info {
+      max-width: 800px;
+      margin: 0 auto 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+
+    .controls {
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 10px 18px;
+      margin: 0 8px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .generate-btn {
+      background: #3498db;
+      color: white;
+    }
+
+    .start-btn {
+      background: #2ecc71;
+      color: white;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      height: 420px;
+      margin: 30px auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 4px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .bar {
+      width: 20px;
+      background: #5b8def;
+      transition: height 0.25s ease, background 0.25s ease;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .active {
+      background: #e74c3c !important;
+    }
+
+    .done {
+      background: #2ecc71 !important;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Merge Sort 視覺化演示</h1>
+
+  <div class="info">
+    <p><strong>原理：</strong>先不斷分割陣列，再把較小元素依序合併回去。</p>
+    <p><strong>時間複雜度：</strong>Best: O(n log n), Average: O(n log n), Worst: O(n log n)</p>
+  </div>
+
+  <div class="controls">
+    <button class="generate-btn" onclick="generateBars()">重新產生資料</button>
+    <button class="start-btn" onclick="startMergeSort()">開始排序</button>
+  </div>
+
+  <div class="container" id="container"></div>
+
+  <a href="index.html">← 回首頁</a>
+
+  <script>
+    const container = document.getElementById("container");
+    let values = [];
+    let isSorting = false;
+
+    function generateBars() {
+      if (isSorting) return;
+      container.innerHTML = "";
+      values = [];
+
+      for (let i = 0; i < 30; i++) {
+        const value = Math.floor(Math.random() * 350) + 20;
+        values.push(value);
+
+        const bar = document.createElement("div");
+        bar.classList.add("bar");
+        bar.style.height = `${value}px`;
+        container.appendChild(bar);
+      }
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function updateBars(highlight = []) {
+      const bars = document.getElementsByClassName("bar");
+      for (let i = 0; i < bars.length; i++) {
+        bars[i].style.height = `${values[i]}px`;
+        bars[i].classList.remove("active");
+        if (highlight.includes(i)) {
+          bars[i].classList.add("active");
+        }
+      }
+    }
+
+    async function merge(left, mid, right) {
+      const leftArr = values.slice(left, mid + 1);
+      const rightArr = values.slice(mid + 1, right + 1);
+
+      let i = 0;
+      let j = 0;
+      let k = left;
+
+      while (i < leftArr.length && j < rightArr.length) {
+        updateBars([k]);
+        await sleep(120);
+
+        if (leftArr[i] <= rightArr[j]) {
+          values[k] = leftArr[i];
+          i++;
+        } else {
+          values[k] = rightArr[j];
+          j++;
+        }
+        updateBars([k]);
+        await sleep(120);
+        k++;
+      }
+
+      while (i < leftArr.length) {
+        values[k] = leftArr[i];
+        updateBars([k]);
+        await sleep(100);
+        i++;
+        k++;
+      }
+
+      while (j < rightArr.length) {
+        values[k] = rightArr[j];
+        updateBars([k]);
+        await sleep(100);
+        j++;
+        k++;
+      }
+    }
+
+    async function mergeSort(left, right) {
+      if (left >= right) return;
+
+      const mid = Math.floor((left + right) / 2);
+      await mergeSort(left, mid);
+      await mergeSort(mid + 1, right);
+      await merge(left, mid, right);
+    }
+
+    async function startMergeSort() {
+      if (isSorting) return;
+      isSorting = true;
+
+      await mergeSort(0, values.length - 1);
+
+      const bars = document.getElementsByClassName("bar");
+      for (let i = 0; i < bars.length; i++) {
+        bars[i].classList.remove("active");
+        bars[i].classList.add("done");
+      }
+
+      isSorting = false;
+    }
+
+    generateBars();
+  </script>
+</body>
+</html>
