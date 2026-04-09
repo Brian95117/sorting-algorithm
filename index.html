@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sorting Algorithm</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6fb;
+      text-align: center;
+      padding: 40px;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-decoration: none;
+      color: #222;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card h2 {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>排序演算法視覺化展示</h1>
+
+  <div class="grid">
+    <a class="card" href="bubble.html">
+      <h2>Bubble Sort</h2>
+      <p>相鄰比較，較大值往後移動</p>
+    </a>
+
+    <a class="card" href="selection.html">
+      <h2>Selection Sort</h2>
+      <p>每輪選出最小值放到前面</p>
+    </a>
+
+    <a class="card" href="insertion.html">
+      <h2>Insertion Sort</h2>
+      <p>將元素插入已排序區間</p>
+    </a>
+
+    <a class="card" href="merge.html">
+      <h2>Merge Sort</h2>
+      <p>分割後再合併排序</p>
+    </a>
+
+    <a class="card" href="quick.html">
+      <h2>Quick Sort</h2>
+      <p>以 pivot 分區後遞迴排序</p>
+    </a>
+  </div>
+</body>
+</html>
