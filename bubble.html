@@ -3,161 +3,376 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bubble Sort Demo</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 30px;
-      background: #f5f7fb;
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    .info {
-      max-width: 800px;
-      margin: 0 auto 20px;
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-      text-align: left;
-    }
-
-    .controls {
-      margin: 20px 0;
-    }
-
-    button {
-      padding: 10px 18px;
-      margin: 0 8px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
-
-    .generate-btn {
-      background: #3498db;
-      color: white;
-    }
-
-    .start-btn {
-      background: #2ecc71;
-      color: white;
-    }
-
-    .container {
-      width: 90%;
-      max-width: 1000px;
-      height: 420px;
-      margin: 30px auto;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      gap: 4px;
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
-
-    .bar {
-      width: 20px;
-      background: #5b8def;
-      transition: height 0.25s ease, background 0.25s ease;
-      border-radius: 4px 4px 0 0;
-    }
-
-    .active {
-      background: #e74c3c !important;
-    }
-
-    .done {
-      background: #2ecc71 !important;
-    }
-
-    a {
-      display: inline-block;
-      margin-top: 20px;
-      text-decoration: none;
-      color: #333;
-    }
-  </style>
+  <title>Bubble Sort Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Bubble Sort 視覺化演示</h1>
+  <div class="site-shell">
+    <header class="algo-page-header">
+      <a class="back-link" href="index.html">← 回主頁</a>
 
-  <div class="info">
-    <p><strong>原理：</strong>Bubble Sort 會重複比較相鄰兩個元素，若順序錯誤就交換，讓較大的值逐步「浮」到右邊。</p>
-    <p><strong>時間複雜度：</strong>Best: O(n), Average: O(n²), Worst: O(n²)</p>
+      <div class="page-title-wrap">
+        <h1>Bubble Sort 視覺化互動頁</h1>
+        <p>透過控制面板操作資料、速度、排序開始與暫停。</p>
+      </div>
+    </header>
+
+    <div class="algo-layout">
+      <aside class="panel-card">
+        <h2>控制面板</h2>
+
+        <div class="panel-section">
+          <div class="panel-section-title">資料設定</div>
+
+          <div class="control-group">
+            <label for="sizeRange">資料數量</label>
+            <input type="range" id="sizeRange" min="8" max="50" value="24" />
+            <div class="range-meta">目前：<span id="sizeValue">24</span></div>
+          </div>
+
+          <div class="control-group">
+            <label for="speedRange">動畫速度</label>
+            <input type="range" id="speedRange" min="5" max="250" value="60" />
+            <div class="range-meta">延遲：<span id="speedValue">60</span> ms</div>
+          </div>
+
+          <div class="control-group">
+            <label for="customInput">自訂資料（逗號分隔）</label>
+            <textarea id="customInput" placeholder="例如：35, 12, 88, 5, 42, 19"></textarea>
+          </div>
+
+          <div class="button-grid">
+            <button class="btn btn-primary" id="applyCustomBtn">套用資料</button>
+            <button class="btn btn-dark" id="randomBtn">隨機產生</button>
+          </div>
+
+          <div class="hint">
+            可輸入 5～50 個正整數。若資料量較少，欄柱下方會顯示數字。
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <div class="panel-section-title">執行操作</div>
+
+          <div class="button-grid">
+            <button class="btn btn-green" id="startBtn">開始排序</button>
+            <button class="btn btn-yellow" id="pauseBtn">暫停</button>
+            <button class="btn btn-primary" id="resumeBtn">繼續</button>
+            <button class="btn btn-dark" id="resetBtn">重設統計</button>
+            <button class="btn btn-dark" id="shuffleBtn">打亂資料</button>
+            <a class="btn btn-secondary" href="selection.html">下一頁 →</a>
+          </div>
+        </div>
+      </aside>
+
+      <main class="visual-card">
+        <div class="top-info-row">
+          <h2>即時視覺化</h2>
+          <div class="algo-pill">Bubble Sort</div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stats-card">
+            <h3>比較次數</h3>
+            <p id="compareCount">0</p>
+          </div>
+          <div class="stats-card">
+            <h3>交換次數</h3>
+            <p id="swapCount">0</p>
+          </div>
+          <div class="stats-card">
+            <h3>已排序數量</h3>
+            <p id="sortedCount">0</p>
+          </div>
+          <div class="stats-card status">
+            <h3>目前狀態</h3>
+            <p id="statusText">等待開始</p>
+          </div>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span>未排序</div>
+          <div class="legend-item"><span class="legend-color" style="background:#eab308;"></span>比較中</div>
+          <div class="legend-item"><span class="legend-color" style="background:#ef4444;"></span>交換中</div>
+          <div class="legend-item"><span class="legend-color" style="background:#10b981;"></span>已排序</div>
+        </div>
+
+        <div class="canvas" id="canvas"></div>
+
+        <div class="info-box">
+          <strong>演算法原理：</strong>
+          Bubble Sort 會重複比較相鄰兩個元素，如果前面的值比後面的值大，就進行交換。
+          每完成一輪，最大的值就會被推到最右邊，因此右側的已排序區域會逐步擴大。<br /><br />
+          <strong>時間複雜度：</strong>
+          Best: O(n)、Average: O(n²)、Worst: O(n²)
+        </div>
+      </main>
+    </div>
   </div>
-
-  <div class="controls">
-    <button class="generate-btn" onclick="generateBars()">重新產生資料</button>
-    <button class="start-btn" onclick="bubbleSort()">開始排序</button>
-  </div>
-
-  <div class="container" id="container"></div>
-
-  <a href="index.html">← 回首頁</a>
 
   <script>
-    const container = document.getElementById("container");
+    const canvas = document.getElementById("canvas");
+
+    const sizeRange = document.getElementById("sizeRange");
+    const speedRange = document.getElementById("speedRange");
+    const sizeValue = document.getElementById("sizeValue");
+    const speedValue = document.getElementById("speedValue");
+
+    const customInput = document.getElementById("customInput");
+
+    const compareCountEl = document.getElementById("compareCount");
+    const swapCountEl = document.getElementById("swapCount");
+    const sortedCountEl = document.getElementById("sortedCount");
+    const statusText = document.getElementById("statusText");
+
+    const applyCustomBtn = document.getElementById("applyCustomBtn");
+    const randomBtn = document.getElementById("randomBtn");
+    const startBtn = document.getElementById("startBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const resumeBtn = document.getElementById("resumeBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const shuffleBtn = document.getElementById("shuffleBtn");
+
     let values = [];
+    let compareCount = 0;
+    let swapCount = 0;
+    let sortedCount = 0;
 
-    function generateBars() {
-      container.innerHTML = "";
-      values = [];
+    let isSorting = false;
+    let isPaused = false;
+    let stopRequested = false;
 
-      for (let i = 0; i < 30; i++) {
-        const value = Math.floor(Math.random() * 350) + 20;
-        values.push(value);
+    function randomValue() {
+      return Math.floor(Math.random() * 360) + 20;
+    }
 
-        const bar = document.createElement("div");
-        bar.classList.add("bar");
-        bar.style.height = `${value}px`;
-        container.appendChild(bar);
-      }
+    function getDelay() {
+      return Number(speedRange.value);
     }
 
     function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    async function bubbleSort() {
-      const bars = document.getElementsByClassName("bar");
-
-      for (let i = 0; i < values.length; i++) {
-        for (let j = 0; j < values.length - i - 1; j++) {
-          bars[j].classList.add("active");
-          bars[j + 1].classList.add("active");
-
-          await sleep(120);
-
-          if (values[j] > values[j + 1]) {
-            [values[j], values[j + 1]] = [values[j + 1], values[j]];
-
-            bars[j].style.height = `${values[j]}px`;
-            bars[j + 1].style.height = `${values[j + 1]}px`;
-          }
-
-          bars[j].classList.remove("active");
-          bars[j + 1].classList.remove("active");
-        }
-
-        bars[values.length - i - 1].classList.add("done");
+    async function waitWhilePaused() {
+      while (isPaused && !stopRequested) {
+        await sleep(40);
       }
     }
 
-    generateBars();
+    function updateStats() {
+      compareCountEl.textContent = compareCount;
+      swapCountEl.textContent = swapCount;
+      sortedCountEl.textContent = sortedCount;
+    }
+
+    function updateStatus(text) {
+      statusText.textContent = text;
+    }
+
+    function syncInput() {
+      customInput.value = values.join(", ");
+    }
+
+    function renderBars(active = [], compare = [], sorted = []) {
+      canvas.innerHTML = "";
+      const showLabels = values.length <= 18;
+      const maxValue = Math.max(...values, 1);
+
+      values.forEach((value, index) => {
+        const bar = document.createElement("div");
+        bar.className = "bar";
+
+        const h = (value / maxValue) * 420 + 20;
+        bar.style.height = `${h}px`;
+
+        if (compare.includes(index)) bar.classList.add("compare");
+        if (active.includes(index)) bar.classList.add("active");
+        if (sorted.includes(index)) bar.classList.add("sorted");
+
+        if (showLabels) {
+          const label = document.createElement("div");
+          label.className = "bar-label";
+          label.textContent = value;
+          bar.appendChild(label);
+        }
+
+        canvas.appendChild(bar);
+      });
+    }
+
+    function setDefaultState(message = "等待開始") {
+      compareCount = 0;
+      swapCount = 0;
+      sortedCount = 0;
+      updateStats();
+      updateStatus(message);
+      renderBars();
+    }
+
+    function generateRandomData() {
+      if (isSorting) return;
+
+      const size = Number(sizeRange.value);
+      values = Array.from({ length: size }, randomValue);
+      syncInput();
+      setDefaultState("已產生隨機資料");
+    }
+
+    function applyCustomData() {
+      if (isSorting) return;
+
+      const raw = customInput.value.trim();
+      if (!raw) {
+        alert("請先輸入資料。");
+        return;
+      }
+
+      const arr = raw
+        .split(/[\s,，]+/)
+        .map(v => Number(v))
+        .filter(v => Number.isFinite(v));
+
+      if (arr.length < 5 || arr.length > 50) {
+        alert("請輸入 5 到 50 個數字。");
+        return;
+      }
+
+      if (arr.some(v => v <= 0)) {
+        alert("請輸入正整數。");
+        return;
+      }
+
+      values = arr;
+      sizeRange.value = arr.length;
+      sizeValue.textContent = arr.length;
+      setDefaultState("已套用自訂資料");
+    }
+
+    function shuffleData() {
+      if (isSorting) return;
+
+      for (let i = values.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [values[i], values[j]] = [values[j], values[i]];
+      }
+
+      syncInput();
+      setDefaultState("資料已打亂");
+    }
+
+    function resetStatsOnly() {
+      if (isSorting) return;
+      compareCount = 0;
+      swapCount = 0;
+      sortedCount = 0;
+      updateStats();
+      updateStatus("統計已重設");
+      renderBars();
+    }
+
+    async function bubbleSort() {
+      const sorted = [];
+
+      for (let i = 0; i < values.length; i++) {
+        for (let j = 0; j < values.length - i - 1; j++) {
+          if (stopRequested) return;
+          await waitWhilePaused();
+
+          compareCount++;
+          updateStats();
+          updateStatus(`比較 index ${j} 和 ${j + 1}`);
+          renderBars([], [j, j + 1], sorted);
+          await sleep(getDelay());
+
+          if (values[j] > values[j + 1]) {
+            swapCount++;
+            [values[j], values[j + 1]] = [values[j + 1], values[j]];
+            updateStats();
+            updateStatus(`交換 index ${j} 和 ${j + 1}`);
+            renderBars([j, j + 1], [], sorted);
+            await sleep(getDelay());
+          }
+        }
+
+        sorted.unshift(values.length - i - 1);
+        sortedCount = sorted.length;
+        updateStats();
+        renderBars([], [], sorted);
+      }
+    }
+
+    async function startSorting() {
+      if (isSorting) return;
+
+      isSorting = true;
+      isPaused = false;
+      stopRequested = false;
+
+      compareCount = 0;
+      swapCount = 0;
+      sortedCount = 0;
+      updateStats();
+
+      try {
+        updateStatus("開始排序");
+        await bubbleSort();
+
+        if (!stopRequested) {
+          sortedCount = values.length;
+          updateStats();
+          renderBars([], [], [...Array(values.length).keys()]);
+          updateStatus("排序完成");
+        }
+      } finally {
+        isSorting = false;
+        isPaused = false;
+        stopRequested = false;
+        syncInput();
+      }
+    }
+
+    function pauseSorting() {
+      if (!isSorting) return;
+      isPaused = true;
+      updateStatus("已暫停");
+    }
+
+    function resumeSorting() {
+      if (!isSorting) return;
+      isPaused = false;
+      updateStatus("繼續排序中");
+    }
+
+    sizeRange.addEventListener("input", () => {
+      sizeValue.textContent = sizeRange.value;
+      if (!isSorting) generateRandomData();
+    });
+
+    speedRange.addEventListener("input", () => {
+      speedValue.textContent = speedRange.value;
+    });
+
+    applyCustomBtn.addEventListener("click", applyCustomData);
+    randomBtn.addEventListener("click", generateRandomData);
+    startBtn.addEventListener("click", startSorting);
+    pauseBtn.addEventListener("click", pauseSorting);
+    resumeBtn.addEventListener("click", resumeSorting);
+    resetBtn.addEventListener("click", resetStatsOnly);
+    shuffleBtn.addEventListener("click", shuffleData);
+
+    window.addEventListener("keydown", (e) => {
+      if (e.code === "Space") {
+        e.preventDefault();
+        if (isSorting && !isPaused) pauseSorting();
+        else if (isSorting && isPaused) resumeSorting();
+      } else if (e.key.toLowerCase() === "r") {
+        e.preventDefault();
+        if (!isSorting) generateRandomData();
+      }
+    });
+
+    generateRandomData();
   </script>
 </body>
 </html>
