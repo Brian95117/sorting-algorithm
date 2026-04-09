@@ -12,21 +12,17 @@
       <div class="hero-badge">Sorting Algorithm Project</div>
       <h1>排序演算法互動展示平台</h1>
       <p class="hero-text">
-        這個網站整理了多種常見排序法的互動式視覺化頁面。
-        你可以從主頁進入各演算法分頁，調整資料數量、控制動畫速度，
-        並觀察比較、交換與排序完成的過程。
+        歡迎來到排序演算法互動展示網站。<br>
+        請從下方卡片選擇想查看的排序法，
+        進入各自的互動頁面後，你可以調整資料數量、控制速度，
+        並觀察排序過程中的比較與交換變化。
       </p>
-
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="bubble.html">先看 Bubble Sort</a>
-        <a class="btn btn-secondary" href="#algorithms">查看所有演算法</a>
-      </div>
     </header>
 
     <main>
       <section class="summary-section">
         <div class="summary-card">
-          <div class="summary-title">頁面數量</div>
+          <div class="summary-title">演算法數量</div>
           <div class="summary-value">5 種</div>
         </div>
         <div class="summary-card">
@@ -34,8 +30,8 @@
           <div class="summary-value">互動動畫</div>
         </div>
         <div class="summary-card">
-          <div class="summary-title">適用用途</div>
-          <div class="summary-value">教學 / 作業</div>
+          <div class="summary-title">專題用途</div>
+          <div class="summary-value">作業 / 教學</div>
         </div>
         <div class="summary-card">
           <div class="summary-title">技術</div>
@@ -45,93 +41,67 @@
 
       <section class="section-block" id="algorithms">
         <div class="section-heading">
-          <h2>演算法頁面</h2>
-          <p>點擊卡片即可進入各排序法的互動式展示頁。</p>
+          <h2>請選擇排序法</h2>
+          <p>點擊任一卡片即可進入該排序法的互動式展示頁。</p>
         </div>
 
         <div class="card-grid">
           <a class="algo-card" href="bubble.html">
             <div class="algo-icon">🫧</div>
             <h3>Bubble Sort</h3>
-            <p>透過相鄰元素兩兩比較與交換，讓較大的值逐步移到右側。</p>
+            <p>透過相鄰元素比較與交換，讓較大的值逐步移到右邊。</p>
             <div class="algo-meta">
               <span class="algo-tag">O(n²)</span>
-              <span>相鄰交換</span>
+              <span>點擊進入</span>
             </div>
           </a>
 
           <a class="algo-card" href="selection.html">
             <div class="algo-icon">🎯</div>
             <h3>Selection Sort</h3>
-            <p>每一輪從未排序區間中找出最小值，放到前方正確位置。</p>
+            <p>每一輪從未排序區間中挑出最小值，放到前方正確位置。</p>
             <div class="algo-meta">
               <span class="algo-tag">O(n²)</span>
-              <span>選最小值</span>
+              <span>點擊進入</span>
             </div>
           </a>
 
           <a class="algo-card" href="insertion.html">
             <div class="algo-icon">📥</div>
             <h3>Insertion Sort</h3>
-            <p>把新元素插入已排序區間中，就像整理撲克牌一樣。</p>
+            <p>把元素插入已排序區間中，很像整理撲克牌的方式。</p>
             <div class="algo-meta">
               <span class="algo-tag">O(n²)</span>
-              <span>插入排序</span>
+              <span>點擊進入</span>
             </div>
           </a>
 
           <a class="algo-card" href="merge.html">
             <div class="algo-icon">🧩</div>
             <h3>Merge Sort</h3>
-            <p>先分割再合併，屬於經典分治法，效率比平方級排序更佳。</p>
+            <p>先分割資料，再合併排序，屬於分治法中的經典演算法。</p>
             <div class="algo-meta">
               <span class="algo-tag">O(n log n)</span>
-              <span>分割合併</span>
+              <span>點擊進入</span>
             </div>
           </a>
 
           <a class="algo-card" href="quick.html">
             <div class="algo-icon">⚡</div>
             <h3>Quick Sort</h3>
-            <p>選擇 pivot 分區，再分別對左右兩側遞迴排序。</p>
+            <p>利用 pivot 進行分區，再對左右兩側遞迴排序。</p>
             <div class="algo-meta">
               <span class="algo-tag">O(n log n)</span>
-              <span>Pivot 分區</span>
+              <span>點擊進入</span>
             </div>
           </a>
-        </div>
-      </section>
-
-      <section class="section-block">
-        <div class="section-heading">
-          <h2>專題特色</h2>
-          <p>這個版本不是靜態介紹，而是可實際操作的互動式視覺化頁面。</p>
-        </div>
-
-        <div class="feature-grid">
-          <div class="feature-card">
-            <h3>可調資料量</h3>
-            <p>使用滑桿控制資料筆數，觀察不同規模下的排序過程。</p>
-          </div>
-          <div class="feature-card">
-            <h3>速度控制</h3>
-            <p>可以加快或放慢動畫速度，更容易觀察每一步比較與交換。</p>
-          </div>
-          <div class="feature-card">
-            <h3>暫停 / 繼續</h3>
-            <p>排序途中可暫停，方便講解或截圖展示。</p>
-          </div>
-          <div class="feature-card">
-            <h3>統計資訊</h3>
-            <p>即時顯示比較次數、交換次數與目前狀態。</p>
-          </div>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
       <p>Sorting Algorithm Visualizer</p>
-      <p>以 HTML、CSS、JavaScript 製作的互動式排序演算法專題</p>
+      <p>請由首頁卡片選擇各排序法頁面</p>
     </footer>
   </div>
 </body>
