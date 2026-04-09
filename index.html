@@ -6,101 +6,71 @@
   <title>Sorting Algorithm Visualizer</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="home-modern">
-  <div class="home-wrap">
-    <header class="modern-hero">
-      <div class="modern-hero-left">
-        <div class="mini-badge">Interactive Sorting Project</div>
-        <h1>排序演算法<br>互動展示平台</h1>
-        <p>
-          選擇你想看的排序法，進入各自的互動頁面後，
-          可以調整資料量、控制動畫速度，並觀察每一步比較與交換的過程。
-        </p>
-      </div>
-
-      <div class="modern-hero-right">
-        <div class="hero-preview-card floating-card">
-          <div class="preview-title">Bubble Sort</div>
-          <div class="preview-bars">
-            <span style="height: 55px;"></span>
-            <span style="height: 100px;"></span>
-            <span style="height: 70px;"></span>
-            <span style="height: 130px;"></span>
-            <span style="height: 85px;"></span>
-            <span style="height: 150px;"></span>
-            <span style="height: 95px;"></span>
-          </div>
-        </div>
-
-        <div class="hero-preview-card secondary-card">
-          <div class="small-label">5 Algorithms</div>
-          <div class="small-number">HTML / CSS / JS</div>
-        </div>
-      </div>
+<body class="minimal-body">
+  <div class="site-container">
+    <header class="home-header">
+      <div class="home-badge">Sorting Algorithm Visualizer</div>
+      <h1>排序演算法互動展示平台</h1>
+      <p>
+        選擇一種排序法，進入專屬頁面後可調整資料量、控制動畫速度，
+        並觀察比較、交換與排序完成的過程。
+      </p>
     </header>
 
-    <section class="modern-intro">
-      <div class="intro-box">
-        <h2>選擇一個排序法開始</h2>
-        <p>每張卡片都會帶你進入獨立的互動式演示頁面。</p>
-      </div>
+    <section class="home-grid">
+      <a class="home-card" href="bubble.html">
+        <div class="home-card-top">
+          <span class="emoji">🫧</span>
+          <span class="tag">O(n²)</span>
+        </div>
+        <h2>Bubble Sort</h2>
+        <p>相鄰元素兩兩比較，較大的值逐步往右移動。</p>
+        <div class="home-link">進入頁面 →</div>
+      </a>
+
+      <a class="home-card" href="selection.html">
+        <div class="home-card-top">
+          <span class="emoji">🎯</span>
+          <span class="tag">O(n²)</span>
+        </div>
+        <h2>Selection Sort</h2>
+        <p>每輪找出最小值，放到未排序區間最前方。</p>
+        <div class="home-link">進入頁面 →</div>
+      </a>
+
+      <a class="home-card" href="insertion.html">
+        <div class="home-card-top">
+          <span class="emoji">📥</span>
+          <span class="tag">O(n²)</span>
+        </div>
+        <h2>Insertion Sort</h2>
+        <p>把元素插入前方已排序區間，就像整理撲克牌。</p>
+        <div class="home-link">進入頁面 →</div>
+      </a>
+
+      <a class="home-card" href="merge.html">
+        <div class="home-card-top">
+          <span class="emoji">🧩</span>
+          <span class="tag">O(n log n)</span>
+        </div>
+        <h2>Merge Sort</h2>
+        <p>先分割再合併，屬於經典分治法排序。</p>
+        <div class="home-link">進入頁面 →</div>
+      </a>
+
+      <a class="home-card" href="quick.html">
+        <div class="home-card-top">
+          <span class="emoji">⚡</span>
+          <span class="tag">O(n log n)</span>
+        </div>
+        <h2>Quick Sort</h2>
+        <p>利用 pivot 分區，再遞迴處理左右子陣列。</p>
+        <div class="home-link">進入頁面 →</div>
+      </a>
     </section>
 
-    <main class="modern-card-grid">
-      <a class="modern-nav-card bubble-theme" href="bubble.html">
-        <div class="card-top">
-          <span class="card-emoji">🫧</span>
-          <span class="card-pill">O(n²)</span>
-        </div>
-        <h3>Bubble Sort</h3>
-        <p>相鄰元素兩兩比較，將較大的值逐步推到右側。</p>
-        <div class="card-link">進入頁面 →</div>
-      </a>
-
-      <a class="modern-nav-card selection-theme" href="selection.html">
-        <div class="card-top">
-          <span class="card-emoji">🎯</span>
-          <span class="card-pill">O(n²)</span>
-        </div>
-        <h3>Selection Sort</h3>
-        <p>每一輪挑出最小值，放到未排序區間的最前面。</p>
-        <div class="card-link">進入頁面 →</div>
-      </a>
-
-      <a class="modern-nav-card insertion-theme" href="insertion.html">
-        <div class="card-top">
-          <span class="card-emoji">📥</span>
-          <span class="card-pill">O(n²)</span>
-        </div>
-        <h3>Insertion Sort</h3>
-        <p>把新元素插入已排序區間，就像整理撲克牌。</p>
-        <div class="card-link">進入頁面 →</div>
-      </a>
-
-      <a class="modern-nav-card merge-theme" href="merge.html">
-        <div class="card-top">
-          <span class="card-emoji">🧩</span>
-          <span class="card-pill">O(n log n)</span>
-        </div>
-        <h3>Merge Sort</h3>
-        <p>先分割資料，再逐步合併排序，是經典分治法。</p>
-        <div class="card-link">進入頁面 →</div>
-      </a>
-
-      <a class="modern-nav-card quick-theme" href="quick.html">
-        <div class="card-top">
-          <span class="card-emoji">⚡</span>
-          <span class="card-pill">O(n log n)</span>
-        </div>
-        <h3>Quick Sort</h3>
-        <p>利用 pivot 做分區，再對左右子陣列遞迴排序。</p>
-        <div class="card-link">進入頁面 →</div>
-      </a>
-    </main>
-
-    <footer class="modern-footer">
-      <p>Sorting Algorithm Visualizer</p>
-      <p>請由首頁卡片進入各排序法互動頁面</p>
+    <footer class="home-footer">
+      <p>請由首頁卡片選擇排序法頁面</p>
     </footer>
   </div>
 </body>

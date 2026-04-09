@@ -3,110 +3,113 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bubble Sort Visualizer</title>
+  <title>Bubble Sort</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <div class="site-shell">
-    <header class="algo-page-header">
-      <a class="back-link" href="index.html">← 回主頁</a>
+<body class="minimal-body">
+  <div class="site-container">
+    <header class="page-header">
+      <a class="back-button" href="index.html">← 回主頁</a>
 
-      <div class="page-title-wrap">
-        <h1>Bubble Sort 視覺化互動頁</h1>
-        <p>透過控制面板操作資料、速度、排序開始與暫停。</p>
+      <div class="page-title">
+        <h1>Bubble Sort</h1>
+        <p>可調整資料量、動畫速度，並即時觀察比較與交換過程。</p>
       </div>
     </header>
 
     <div class="algo-layout">
-      <aside class="panel-card">
+      <aside class="sidebar">
         <h2>控制面板</h2>
 
-        <div class="panel-section">
-          <div class="panel-section-title">資料設定</div>
+        <div class="section-label">資料設定</div>
 
-          <div class="control-group">
-            <label for="sizeRange">資料數量</label>
-            <input type="range" id="sizeRange" min="8" max="50" value="24" />
-            <div class="range-meta">目前：<span id="sizeValue">24</span></div>
-          </div>
-
-          <div class="control-group">
-            <label for="speedRange">動畫速度</label>
-            <input type="range" id="speedRange" min="5" max="250" value="60" />
-            <div class="range-meta">延遲：<span id="speedValue">60</span> ms</div>
-          </div>
-
-          <div class="control-group">
-            <label for="customInput">自訂資料（逗號分隔）</label>
-            <textarea id="customInput" placeholder="例如：35, 12, 88, 5, 42, 19"></textarea>
-          </div>
-
-          <div class="button-grid">
-            <button class="btn btn-primary" id="applyCustomBtn">套用資料</button>
-            <button class="btn btn-dark" id="randomBtn">隨機產生</button>
-          </div>
-
-          <div class="hint">
-            可輸入 5～50 個正整數。若資料量較少，欄柱下方會顯示數字。
-          </div>
+        <div class="control-group">
+          <label for="sizeRange">資料數量</label>
+          <input type="range" id="sizeRange" min="8" max="50" value="24" />
+          <div class="range-note">目前：<span id="sizeValue">24</span></div>
         </div>
 
-        <div class="panel-section">
-          <div class="panel-section-title">執行操作</div>
+        <div class="control-group">
+          <label for="speedRange">動畫速度</label>
+          <input type="range" id="speedRange" min="10" max="250" value="60" />
+          <div class="range-note">延遲：<span id="speedValue">60</span> ms</div>
+        </div>
 
-          <div class="button-grid">
-            <button class="btn btn-green" id="startBtn">開始排序</button>
-            <button class="btn btn-yellow" id="pauseBtn">暫停</button>
-            <button class="btn btn-primary" id="resumeBtn">繼續</button>
-            <button class="btn btn-dark" id="resetBtn">重設統計</button>
-            <button class="btn btn-dark" id="shuffleBtn">打亂資料</button>
-            <a class="btn btn-secondary" href="selection.html">下一頁 →</a>
-          </div>
+        <div class="control-group">
+          <label for="customInput">自訂資料（逗號分隔）</label>
+          <textarea id="customInput" placeholder="例如：35, 12, 88, 5, 42, 19"></textarea>
+        </div>
+
+        <div class="button-grid">
+          <button class="btn btn-primary" id="applyCustomBtn">套用資料</button>
+          <button class="btn btn-soft" id="randomBtn">隨機產生</button>
+        </div>
+
+        <div class="helper-text">
+          可輸入 5～50 個正整數。資料量較少時會顯示數字標籤。
+        </div>
+
+        <br />
+
+        <div class="section-label">執行操作</div>
+
+        <div class="button-grid">
+          <button class="btn btn-green" id="startBtn">開始排序</button>
+          <button class="btn btn-yellow" id="pauseBtn">暫停</button>
+          <button class="btn btn-primary" id="resumeBtn">繼續</button>
+          <button class="btn btn-soft" id="resetBtn">重設統計</button>
+          <button class="btn btn-red" id="shuffleBtn">打亂資料</button>
+          <a class="btn btn-soft" href="selection.html">下一頁 →</a>
         </div>
       </aside>
 
-      <main class="visual-card">
-        <div class="top-info-row">
-          <h2>即時視覺化</h2>
-          <div class="algo-pill">Bubble Sort</div>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stats-card">
-            <h3>比較次數</h3>
-            <p id="compareCount">0</p>
+      <div class="main-content">
+        <section class="visual-panel">
+          <div class="panel-top">
+            <h2>即時視覺化</h2>
+            <div class="algo-badge">Bubble Sort</div>
           </div>
-          <div class="stats-card">
-            <h3>交換次數</h3>
-            <p id="swapCount">0</p>
-          </div>
-          <div class="stats-card">
-            <h3>已排序數量</h3>
-            <p id="sortedCount">0</p>
-          </div>
-          <div class="stats-card status">
-            <h3>目前狀態</h3>
-            <p id="statusText">等待開始</p>
-          </div>
-        </div>
 
-        <div class="legend">
-          <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span>未排序</div>
-          <div class="legend-item"><span class="legend-color" style="background:#eab308;"></span>比較中</div>
-          <div class="legend-item"><span class="legend-color" style="background:#ef4444;"></span>交換中</div>
-          <div class="legend-item"><span class="legend-color" style="background:#10b981;"></span>已排序</div>
-        </div>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <h3>比較次數</h3>
+              <p id="compareCount">0</p>
+            </div>
+            <div class="stat-box">
+              <h3>交換次數</h3>
+              <p id="swapCount">0</p>
+            </div>
+            <div class="stat-box">
+              <h3>已排序數量</h3>
+              <p id="sortedCount">0</p>
+            </div>
+            <div class="stat-box status">
+              <h3>目前狀態</h3>
+              <p id="statusText">等待開始</p>
+            </div>
+          </div>
 
-        <div class="canvas" id="canvas"></div>
+          <div class="legend">
+            <div class="legend-item"><span class="legend-color" style="background:#2563eb;"></span>未排序</div>
+            <div class="legend-item"><span class="legend-color" style="background:#fbbf24;"></span>比較中</div>
+            <div class="legend-item"><span class="legend-color" style="background:#f87171;"></span>交換中</div>
+            <div class="legend-item"><span class="legend-color" style="background:#4ade80;"></span>已排序</div>
+          </div>
 
-        <div class="info-box">
-          <strong>演算法原理：</strong>
-          Bubble Sort 會重複比較相鄰兩個元素，如果前面的值比後面的值大，就進行交換。
-          每完成一輪，最大的值就會被推到最右邊，因此右側的已排序區域會逐步擴大。<br /><br />
-          <strong>時間複雜度：</strong>
-          Best: O(n)、Average: O(n²)、Worst: O(n²)
-        </div>
-      </main>
+          <div class="canvas-wrap">
+            <div class="canvas" id="canvas"></div>
+          </div>
+        </section>
+
+        <section class="info-panel">
+          <h2>演算法說明</h2>
+          <p>
+            Bubble Sort 會重複比較相鄰兩個元素，若前面的值比後面的值大，就進行交換。
+            每完成一輪，最大的元素會被移到最右邊，因此右側已排序區域會逐步擴大。<br><br>
+            時間複雜度：Best O(n)、Average O(n²)、Worst O(n²)
+          </p>
+        </section>
+      </div>
     </div>
   </div>
 
@@ -182,8 +185,7 @@
       values.forEach((value, index) => {
         const bar = document.createElement("div");
         bar.className = "bar";
-
-        const h = (value / maxValue) * 420 + 20;
+        const h = (value / maxValue) * 360 + 20;
         bar.style.height = `${h}px`;
 
         if (compare.includes(index)) bar.classList.add("compare");
@@ -212,7 +214,6 @@
 
     function generateRandomData() {
       if (isSorting) return;
-
       const size = Number(sizeRange.value);
       values = Array.from({ length: size }, randomValue);
       syncInput();
@@ -360,17 +361,6 @@
     resumeBtn.addEventListener("click", resumeSorting);
     resetBtn.addEventListener("click", resetStatsOnly);
     shuffleBtn.addEventListener("click", shuffleData);
-
-    window.addEventListener("keydown", (e) => {
-      if (e.code === "Space") {
-        e.preventDefault();
-        if (isSorting && !isPaused) pauseSorting();
-        else if (isSorting && isPaused) resumeSorting();
-      } else if (e.key.toLowerCase() === "r") {
-        e.preventDefault();
-        if (!isSorting) generateRandomData();
-      }
-    });
 
     generateRandomData();
   </script>
