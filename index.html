@@ -3,74 +3,371 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sorting Algorithm</title>
+  <title>Sorting Algorithm Visualizer</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6fb;
-      text-align: center;
-      padding: 40px;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    h1 {
-      margin-bottom: 30px;
+    body {
+      font-family: "Arial", "Microsoft JhengHei", sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f8fbff 50%, #eefaf5 100%);
+      color: #1f2937;
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+    }
+
+    .hero .badge {
+      display: inline-block;
+      background: #ffffffcc;
+      color: #2563eb;
+      border: 1px solid #dbeafe;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      line-height: 1.2;
+      margin-bottom: 18px;
+      color: #111827;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto;
+      font-size: 18px;
+      line-height: 1.8;
+      color: #4b5563;
+    }
+
+    .hero-buttons {
+      margin-top: 28px;
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.25s ease;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.22);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      background: #1d4ed8;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #1f2937;
+      border: 1px solid #d1d5db;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      border-color: #9ca3af;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 30px;
+      margin: 30px 0 12px;
+      color: #111827;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 36px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin: 20px 0 60px;
+    }
+
+    .summary-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      backdrop-filter: blur(10px);
+    }
+
+    .summary-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #374151;
+    }
+
+    .summary-card p {
+      font-size: 28px;
+      font-weight: bold;
+      color: #111827;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      max-width: 900px;
-      margin: 0 auto;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 22px;
     }
 
     .card {
-      background: white;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
       text-decoration: none;
-      color: #222;
-      transition: transform 0.2s ease;
+      color: inherit;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 24px;
+      padding: 26px 24px;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.08);
     }
 
     .card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-8px);
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.14);
+    }
+
+    .icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, #dbeafe, #e0f2fe);
     }
 
     .card h2 {
+      font-size: 22px;
       margin-bottom: 10px;
+      color: #111827;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: #4b5563;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #6b7280;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tag {
+      background: #eff6ff;
+      color: #2563eb;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .footer {
+      margin-top: 70px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        padding-top: 36px;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .section-title {
+        font-size: 26px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>排序演算法視覺化展示</h1>
+  <div class="wrapper">
+    <section class="hero">
+      <div class="badge">Sorting Algorithm Project</div>
+      <h1>排序演算法視覺化展示</h1>
+      <p>
+        這個網站整理了多種常見排序法的互動式演示頁面，
+        透過動畫方式呈現資料比較、交換與遞迴分割的過程，
+        幫助使用者更直觀理解各種排序演算法的核心概念與效能差異。
+      </p>
 
-  <div class="grid">
-    <a class="card" href="bubble.html">
-      <h2>Bubble Sort</h2>
-      <p>相鄰比較，較大值往後移動</p>
-    </a>
+      <div class="hero-buttons">
+        <a class="btn btn-primary" href="bubble.html">開始體驗</a>
+        <a class="btn btn-secondary" href="README.md">查看 README</a>
+      </div>
+    </section>
 
-    <a class="card" href="selection.html">
-      <h2>Selection Sort</h2>
-      <p>每輪選出最小值放到前面</p>
-    </a>
+    <h2 class="section-title">專題總覽</h2>
+    <p class="section-subtitle">以互動動畫方式展示經典排序演算法</p>
 
-    <a class="card" href="insertion.html">
-      <h2>Insertion Sort</h2>
-      <p>將元素插入已排序區間</p>
-    </a>
+    <section class="summary">
+      <div class="summary-card">
+        <h3>演算法數量</h3>
+        <p>5 種</p>
+      </div>
+      <div class="summary-card">
+        <h3>展示方式</h3>
+        <p>HTML 動畫</p>
+      </div>
+      <div class="summary-card">
+        <h3>適用對象</h3>
+        <p>學習 / 教學</p>
+      </div>
+      <div class="summary-card">
+        <h3>專題特色</h3>
+        <p>可互動操作</p>
+      </div>
+    </section>
 
-    <a class="card" href="merge.html">
-      <h2>Merge Sort</h2>
-      <p>分割後再合併排序</p>
-    </a>
+    <h2 class="section-title">演算法列表</h2>
+    <p class="section-subtitle">點擊下方卡片即可進入各排序法的動畫展示頁</p>
 
-    <a class="card" href="quick.html">
-      <h2>Quick Sort</h2>
-      <p>以 pivot 分區後遞迴排序</p>
-    </a>
+    <section class="grid">
+      <a class="card" href="bubble.html">
+        <div class="icon">🫧</div>
+        <h2>Bubble Sort</h2>
+        <p>
+          透過相鄰元素逐一比較與交換，
+          讓較大的值慢慢移動到序列尾端，
+          是最容易理解的基礎排序法之一。
+        </p>
+        <div class="meta">
+          <span class="tag">O(n²)</span>
+          <span>相鄰交換</span>
+        </div>
+      </a>
+
+      <a class="card" href="selection.html">
+        <div class="icon">🎯</div>
+        <h2>Selection Sort</h2>
+        <p>
+          每一輪從未排序區間中選出最小值，
+          再放到前方正確位置，
+          適合用來理解「選擇最值」的概念。
+        </p>
+        <div class="meta">
+          <span class="tag">O(n²)</span>
+          <span>選最小值</span>
+        </div>
+      </a>
+
+      <a class="card" href="insertion.html">
+        <div class="icon">📥</div>
+        <h2>Insertion Sort</h2>
+        <p>
+          將新元素插入前方已排序區間中的適當位置，
+          很像整理撲克牌的方式，
+          是實用且直觀的排序方法。
+        </p>
+        <div class="meta">
+          <span class="tag">O(n²)</span>
+          <span>插入排序</span>
+        </div>
+      </a>
+
+      <a class="card" href="merge.html">
+        <div class="icon">🧩</div>
+        <h2>Merge Sort</h2>
+        <p>
+          先將資料分割成更小區塊，
+          排序後再逐步合併，
+          屬於典型的 Divide and Conquer 演算法。
+        </p>
+        <div class="meta">
+          <span class="tag">O(n log n)</span>
+          <span>分割合併</span>
+        </div>
+      </a>
+
+      <a class="card" href="quick.html">
+        <div class="icon">⚡</div>
+        <h2>Quick Sort</h2>
+        <p>
+          透過 pivot 將資料分成左右兩側，
+          再遞迴排序，
+          平均情況下是非常高效率的經典排序法。
+        </p>
+        <div class="meta">
+          <span class="tag">O(n log n)</span>
+          <span>Pivot 分區</span>
+        </div>
+      </a>
+    </section>
+
+    <footer class="footer">
+      <p>Sorting Algorithm Visualizer</p>
+      <p>使用 HTML / CSS / JavaScript 製作的排序演算法展示專題</p>
+    </footer>
   </div>
 </body>
 </html>
