@@ -3,75 +3,1165 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sorting Algorithm Visualizer</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>排序演算法互動實驗室</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-2: #0c1730;
+      --panel: rgba(8, 16, 34, 0.78);
+      --panel-strong: rgba(7, 13, 28, 0.92);
+      --text: #eaf2ff;
+      --muted: #8ba3c7;
+      --primary: #00e5ff;
+      --secondary: #4f7cff;
+      --accent: #a855f7;
+      --success: #22c55e;
+      --warning: #ffb020;
+      --border: rgba(116, 156, 255, 0.22);
+      --shadow: 0 0 0 1px rgba(0, 229, 255, 0.12), 0 0 24px rgba(0, 229, 255, 0.08), 0 18px 40px rgba(0, 0, 0, 0.35);
+      --grid-line: rgba(255, 255, 255, 0.04);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(0,229,255,0.12), transparent 25%),
+        radial-gradient(circle at 85% 15%, rgba(168,85,247,0.13), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(79,124,255,0.14), transparent 30%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      opacity: 0.7;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.8), rgba(0,0,0,0.35));
+    }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1, h2, h3, h4 { margin: 0 0 12px; }
+    p { margin: 0 0 10px; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px;
+      border-radius: 28px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(7,14,29,0.92), rgba(11,25,52,0.82));
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(0,229,255,0.08), transparent);
+      transform: translateX(-100%);
+      animation: scan 7s linear infinite;
+      pointer-events: none;
+    }
+
+    .hero .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(0,229,255,0.1);
+      border: 1px solid rgba(0,229,255,0.24);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #baf7ff;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 1.05;
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      color: #c8dbf7;
+      max-width: 880px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .hero-stat {
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(100,145,255,0.16);
+      background: rgba(8, 18, 38, 0.72);
+      box-shadow: inset 0 0 18px rgba(0,229,255,0.03);
+    }
+
+    .hero-stat .k {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .hero-stat .v {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel, .card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(10,20,40,0.82), rgba(7,13,28,0.94));
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+    }
+
+    .panel::after, .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.04), transparent 30%, transparent 70%, rgba(0,229,255,0.05));
+      pointer-events: none;
+    }
+
+    .panel:hover, .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0,229,255,0.35);
+      box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.16), 0 0 30px rgba(0, 229, 255, 0.10), 0 24px 48px rgba(0, 0, 0, 0.42);
+    }
+
+    .sticky { position: sticky; top: 20px; }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .section-title small {
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .algo-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .algo-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid rgba(106,145,255,0.18);
+      background: linear-gradient(180deg, rgba(10,18,36,0.9), rgba(8,15,30,0.96));
+      border-radius: 18px;
+      padding: 15px;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    }
+
+    .algo-btn:hover, .algo-btn.active {
+      border-color: rgba(0,229,255,0.42);
+      background: linear-gradient(180deg, rgba(11,28,54,0.95), rgba(8,18,36,0.96));
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.26), 0 0 16px rgba(0,229,255,0.12);
+    }
+
+    .algo-btn .sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 18px 0 20px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    input, select, button, textarea {
+      font: inherit;
+    }
+
+    input[type="number"], textarea, select {
+      width: 100%;
+      border: 1px solid rgba(102,145,255,0.20);
+      border-radius: 14px;
+      padding: 11px 12px;
+      background: rgba(5, 12, 24, 0.92);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    input[type="number"]:focus, textarea:focus, select:focus {
+      border-color: rgba(0,229,255,0.55);
+      box-shadow: 0 0 0 3px rgba(0,229,255,0.10), 0 0 16px rgba(0,229,255,0.10);
+    }
+
+    textarea {
+      min-height: 48px;
+      resize: vertical;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      border: 1px solid rgba(102,145,255,0.20);
+      border-radius: 14px;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--text);
+      background: rgba(9, 18, 36, 0.94);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, filter 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(0,229,255,0.42);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.28), 0 0 16px rgba(0,229,255,0.12);
+      filter: brightness(1.04);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, rgba(0,229,255,0.22), rgba(79,124,255,0.24));
+    }
+
+    .btn.secondary {
+      background: linear-gradient(135deg, rgba(168,85,247,0.20), rgba(79,124,255,0.18));
+    }
+
+    .btn.ghost {
+      background: rgba(11, 21, 42, 0.88);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(0,229,255,0.16), rgba(79,124,255,0.20));
+      border: 1px solid rgba(0,229,255,0.22);
+      color: #c8fbff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .bars-wrap {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+      min-height: 370px;
+      display: flex;
+      align-items: end;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(4,10,24,0.95), rgba(8,16,34,0.98));
+      background-size: 22px 22px, 22px 22px, auto;
+      box-shadow: inset 0 0 40px rgba(0,229,255,0.03);
+    }
+
+    .bars-wrap::before {
+      content: "VISUAL ANALYZER";
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      color: rgba(139,163,199,0.52);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+    }
+
+    .bars {
+      width: 100%;
+      height: 320px;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bar {
+      flex: 1;
+      min-width: 18px;
+      max-width: 48px;
+      background: linear-gradient(180deg, #56f0ff 0%, #1a7cff 100%);
+      border-radius: 12px 12px 4px 4px;
+      position: relative;
+      transition: height 0.22s ease, transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      box-shadow: 0 0 14px rgba(0,229,255,0.25), 0 10px 18px rgba(0,0,0,0.24);
+    }
+
+    .bar span {
+      position: absolute;
+      top: -26px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #d7eaff;
+      text-shadow: 0 0 10px rgba(0,229,255,0.22);
+    }
+
+    .bar.active {
+      background: linear-gradient(180deg, #ffd66b 0%, #f59e0b 100%);
+      box-shadow: 0 0 20px rgba(245,158,11,0.55), 0 0 40px rgba(245,158,11,0.18);
+      transform: translateY(-5px);
+    }
+
+    .bar.compare {
+      background: linear-gradient(180deg, #d49bff 0%, #7c3aed 100%);
+      box-shadow: 0 0 20px rgba(168,85,247,0.55), 0 0 40px rgba(168,85,247,0.18);
+      transform: translateY(-5px);
+    }
+
+    .bar.sorted {
+      background: linear-gradient(180deg, #59ef95 0%, #16a34a 100%);
+      box-shadow: 0 0 20px rgba(34,197,94,0.55), 0 0 40px rgba(34,197,94,0.18);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    ul {
+      margin: 10px 0 0 20px;
+      color: #dce9ff;
+    }
+
+    .steps {
+      max-height: 260px;
+      overflow: auto;
+      padding-right: 8px;
+      font-size: 14px;
+    }
+
+    .step-item {
+      padding: 9px 11px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      background: rgba(10, 20, 40, 0.86);
+      border: 1px solid rgba(102,145,255,0.18);
+      color: #d9e7ff;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .metric {
+      background: linear-gradient(180deg, rgba(11,22,44,0.88), rgba(8,16,34,0.98));
+      border: 1px solid rgba(102,145,255,0.18);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: inset 0 0 20px rgba(0,229,255,0.03);
+    }
+
+    .metric .label {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .metric .value {
+      font-size: 22px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 14px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 18px;
+      border: 1px solid rgba(102,145,255,0.18);
+      background: rgba(7, 15, 30, 0.84);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      border-bottom: 1px solid rgba(102,145,255,0.14);
+      text-align: left;
+      color: #d9e8ff;
+      white-space: nowrap;
+    }
+
+    thead tr {
+      background: linear-gradient(135deg, rgba(0,229,255,0.12), rgba(79,124,255,0.18));
+    }
+
+    tbody tr:hover {
+      background: rgba(0,229,255,0.04);
+    }
+
+    .chart-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .chart-caption {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .chart-shell {
+      border: 1px solid rgba(102,145,255,0.18);
+      border-radius: 18px;
+      background: rgba(7,15,30,0.76);
+      padding: 12px;
+    }
+
+    canvas {
+      width: 100%;
+      max-width: 100%;
+      background: transparent;
+    }
+
+    .status-line {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(102,145,255,0.16);
+      background: rgba(9,18,36,0.72);
+    }
+
+    @keyframes scan {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @media (max-width: 1080px) {
+      .grid, .info-grid { grid-template-columns: 1fr; }
+      .sticky { position: static; }
+    }
+
+    @media (max-width: 860px) {
+      .controls, .meta, .hero-stats { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 14px; }
+      .hero, .panel, .card { padding: 16px; border-radius: 18px; }
+      .controls, .meta, .hero-stats { grid-template-columns: 1fr; }
+      .bars { gap: 4px; }
+      .bar span { font-size: 10px; top: -22px; }
+      .hero h1 { font-size: 2rem; }
+    }
+  </style>
 </head>
-<body class="minimal-body">
-  <div class="site-container">
-    <header class="home-header">
-      <div class="home-badge">Sorting Algorithm Visualizer</div>
-      <h1>排序演算法互動展示平台</h1>
-      <p>
-        選擇一種排序法，進入專屬頁面後可調整資料量、控制動畫速度，
-        並觀察比較、交換與排序完成的過程。
-      </p>
-    </header>
-
-    <section class="home-grid">
-      <a class="home-card" href="bubble.html">
-        <div class="home-card-top">
-          <span class="emoji">🫧</span>
-          <span class="tag">O(n²)</span>
-        </div>
-        <h2>Bubble Sort</h2>
-        <p>相鄰元素兩兩比較，較大的值逐步往右移動。</p>
-        <div class="home-link">進入頁面 →</div>
-      </a>
-
-      <a class="home-card" href="selection.html">
-        <div class="home-card-top">
-          <span class="emoji">🎯</span>
-          <span class="tag">O(n²)</span>
-        </div>
-        <h2>Selection Sort</h2>
-        <p>每輪找出最小值，放到未排序區間最前方。</p>
-        <div class="home-link">進入頁面 →</div>
-      </a>
-
-      <a class="home-card" href="insertion.html">
-        <div class="home-card-top">
-          <span class="emoji">📥</span>
-          <span class="tag">O(n²)</span>
-        </div>
-        <h2>Insertion Sort</h2>
-        <p>把元素插入前方已排序區間，就像整理撲克牌。</p>
-        <div class="home-link">進入頁面 →</div>
-      </a>
-
-      <a class="home-card" href="merge.html">
-        <div class="home-card-top">
-          <span class="emoji">🧩</span>
-          <span class="tag">O(n log n)</span>
-        </div>
-        <h2>Merge Sort</h2>
-        <p>先分割再合併，屬於經典分治法排序。</p>
-        <div class="home-link">進入頁面 →</div>
-      </a>
-
-      <a class="home-card" href="quick.html">
-        <div class="home-card-top">
-          <span class="emoji">⚡</span>
-          <span class="tag">O(n log n)</span>
-        </div>
-        <h2>Quick Sort</h2>
-        <p>利用 pivot 分區，再遞迴處理左右子陣列。</p>
-        <div class="home-link">進入頁面 →</div>
-      </a>
+<body>
+  <div class="container">
+    <section class="hero">
+      <div class="eyebrow">Algorithm Lab Interface</div>
+      <h1>排序演算法</h1>
+      
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="k">Algorithms</div><div class="v">5 種排序法</div></div>
+        <div class="hero-stat"><div class="k">Visualization</div><div class="v">逐步動畫展示</div></div>
+        <div class="hero-stat"><div class="k">Benchmark</div><div class="v">多規模時間比較</div></div>
+      </div>
     </section>
 
-    <footer class="home-footer">
-      <p>請由首頁卡片選擇排序法頁面</p>
-    </footer>
+    <div class="grid">
+      <aside class="panel sticky">
+        <div class="section-title">
+          <h2>排序法選單</h2>
+          <small>Switch</small>
+        </div>
+        <p style="color: var(--muted);">點選不同排序法，右側會同步切換原理、複雜度、動畫與操作說明。</p>
+        <div class="algo-list" id="algoList"></div>
+      </aside>
+
+      <main>
+        <section class="card">
+          <span class="badge" id="algoType">Sorting Algorithm</span>
+          <h2 id="algoName">插入排序</h2>
+          <p id="algoDesc"></p>
+
+          <div class="controls">
+            <div class="field">
+              <label for="sizeInput">資料筆數</label>
+              <input id="sizeInput" type="number" min="5" max="30" value="12" />
+            </div>
+            <div class="field">
+              <label for="speedInput">速度（毫秒）</label>
+              <input id="speedInput" type="number" min="50" max="2000" step="50" value="260" />
+            </div>
+            <div class="field">
+              <label for="modeSelect">資料型態</label>
+              <select id="modeSelect">
+                <option value="random">隨機資料</option>
+                <option value="nearly">接近已排序</option>
+                <option value="reverse">反向資料</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="customInput">自訂數列</label>
+              <textarea id="customInput" placeholder="例如：5,3,8,1,6"></textarea>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn primary" id="generateBtn">產生資料</button>
+            <button class="btn secondary" id="startBtn">開始排序</button>
+            <button class="btn ghost" id="stepBtn">單步執行</button>
+            <button class="btn ghost" id="resetBtn">重設</button>
+          </div>
+
+          <div class="bars-wrap">
+            <div class="bars" id="bars"></div>
+          </div>
+
+          <div class="meta">
+            <div class="metric"><div class="label">比較次數</div><div class="value" id="compareCount">0</div></div>
+            <div class="metric"><div class="label">交換 / 寫入次數</div><div class="value" id="swapCount">0</div></div>
+            <div class="metric"><div class="label">目前步驟</div><div class="value" id="stepCount">0</div></div>
+            <div class="metric"><div class="label">目前狀態</div><div class="value" id="statusText">待機</div></div>
+          </div>
+        </section>
+
+        <section class="info-grid">
+          <div class="card">
+            <div class="section-title">
+              <h3>基本原理與操作方式</h3>
+              <small>Theory</small>
+            </div>
+            <p id="algoPrinciple"></p>
+            <ul id="algoBullets"></ul>
+            <div class="footer-note" id="algoComplexity"></div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <h3>步驟紀錄</h3>
+              <small>Log</small>
+            </div>
+            <div class="steps" id="steps"></div>
+          </div>
+        </section>
+
+        <section class="card" style="margin-top:20px;">
+          <div class="section-title">
+            <h3>複雜度比較表</h3>
+            <small>Complexity Matrix</small>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>排序法</th>
+                  <th>最佳情況</th>
+                  <th>平均情況</th>
+                  <th>最差情況</th>
+                  <th>空間複雜度</th>
+                  <th>穩定性</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>氣泡排序</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>穩定</td></tr>
+                <tr><td>選擇排序</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>不穩定</td></tr>
+                <tr><td>插入排序</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>穩定</td></tr>
+                <tr><td>合併排序</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>穩定</td></tr>
+                <tr><td>堆積排序</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>不穩定</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card" style="margin-top:20px;">
+          <div class="section-title">
+            <h3>實驗結果圖表區</h3>
+            <small>Benchmark</small>
+          </div>
+          <p class="chart-caption">使用不同資料規模測試五種排序法，圖表會呈現平均執行時間變化，方便直接放進作業報告。</p>
+          <div class="chart-tools">
+            <button class="btn primary" onclick="runBenchmark()">執行測試</button>
+            <button class="btn ghost" onclick="runBenchmark()">重新測試</button>
+          </div>
+          <div class="chart-shell">
+            <canvas id="chart" height="120"></canvas>
+          </div>
+          <div class="status-line">
+            <span class="pill">測試規模：n = 10, 30, 60, 100, 200</span>
+            <span class="pill">每組資料平均執行 4 次</span>
+            <span class="pill" id="benchmarkStatus">尚未執行效能測試</span>
+          </div>
+        </section>
+      </main>
+    </div>
   </div>
+
+  <script>
+    const algorithms = {
+      bubble: {
+        label: '1. 氣泡排序',
+        english: 'Bubble Sort',
+        desc: '重複比較相鄰元素，若順序錯誤就交換，每一輪把最大值一路推到右側。',
+        principle: '基本原理：重複掃描陣列，對相鄰元素兩兩比較，若順序錯誤就交換。每完成一輪，最大元素會被推到最右側。',
+        bullets: ['從左到右依序比較相鄰元素', '若左邊大於右邊就交換', '每輪完成後，最後方元素會固定', '下一輪可縮小比較範圍'],
+        complexity: '時間複雜度：最佳 O(n)、平均 O(n²)、最差 O(n²)；空間複雜度：O(1)',
+        generator(arr) {
+          const a = [...arr];
+          const steps = [];
+          for (let i = 0; i < a.length - 1; i++) {
+            for (let j = 0; j < a.length - 1 - i; j++) {
+              steps.push({ type: 'compare', indices: [j, j + 1], array: [...a], message: `比較索引 ${j} 與 ${j + 1}` });
+              if (a[j] > a[j + 1]) {
+                [a[j], a[j + 1]] = [a[j + 1], a[j]];
+                steps.push({ type: 'swap', indices: [j, j + 1], array: [...a], message: `交換索引 ${j} 與 ${j + 1}` });
+              }
+            }
+            steps.push({ type: 'sorted', indices: [a.length - 1 - i], array: [...a], message: `索引 ${a.length - 1 - i} 已定位` });
+          }
+          steps.push({ type: 'done', indices: a.map((_, i) => i), array: [...a], message: '排序完成' });
+          return steps;
+        }
+      },
+      selection: {
+        label: '2. 選擇排序',
+        english: 'Selection Sort',
+        desc: '每一輪從未排序區間找出最小值，放到目前最前面的位置。',
+        principle: '基本原理：在未排序區間中選出最小元素，然後與未排序區間的第一個元素交換，讓已排序區間逐步擴大。',
+        bullets: ['每輪先假設最前方是最小值', '往後掃描找真正最小值', '找到後與目前位置交換', '已排序區會逐步向右擴張'],
+        complexity: '時間複雜度：最佳 / 平均 / 最差皆為 O(n²)；空間複雜度：O(1)',
+        generator(arr) {
+          const a = [...arr];
+          const steps = [];
+          for (let i = 0; i < a.length - 1; i++) {
+            let min = i;
+            for (let j = i + 1; j < a.length; j++) {
+              steps.push({ type: 'compare', indices: [min, j], array: [...a], message: `比較目前最小值索引 ${min} 與索引 ${j}` });
+              if (a[j] < a[min]) {
+                min = j;
+                steps.push({ type: 'mark', indices: [min], array: [...a], message: `更新最小值索引為 ${min}` });
+              }
+            }
+            if (min !== i) {
+              [a[i], a[min]] = [a[min], a[i]];
+              steps.push({ type: 'swap', indices: [i, min], array: [...a], message: `交換索引 ${i} 與 ${min}` });
+            }
+            steps.push({ type: 'sorted', indices: [i], array: [...a], message: `索引 ${i} 已定位` });
+          }
+          steps.push({ type: 'done', indices: a.map((_, i) => i), array: [...a], message: '排序完成' });
+          return steps;
+        }
+      },
+      insertion: {
+        label: '3. 插入排序',
+        english: 'Insertion Sort',
+        desc: '把資料分成已排序與未排序區間，逐一取出元素插入到正確位置。',
+        principle: '基本原理：從第二個元素開始，把當前元素暫存，向左比較已排序區的元素，將較大的元素往右移，最後插入空位。',
+        bullets: ['第一個元素可視為已排序', '取出下一個元素暫存', '把左邊較大的值往右移', '將暫存值放到正確位置'],
+        complexity: '時間複雜度：最佳 O(n)、平均 O(n²)、最差 O(n²)；空間複雜度：O(1)',
+        generator(arr) {
+          const a = [...arr];
+          const steps = [];
+          for (let i = 1; i < a.length; i++) {
+            const key = a[i];
+            let j = i - 1;
+            steps.push({ type: 'mark', indices: [i], array: [...a], message: `取出索引 ${i} 的值 ${key}` });
+            while (j >= 0) {
+              steps.push({ type: 'compare', indices: [j, j + 1], array: [...a], message: `比較 ${a[j]} 與插入值 ${key}` });
+              if (a[j] > key) {
+                a[j + 1] = a[j];
+                steps.push({ type: 'swap', indices: [j, j + 1], array: [...a], message: `將 ${a[j]} 右移到索引 ${j + 1}` });
+                j--;
+              } else {
+                break;
+              }
+            }
+            a[j + 1] = key;
+            steps.push({ type: 'insert', indices: [j + 1], array: [...a], message: `將 ${key} 插入索引 ${j + 1}` });
+          }
+          steps.push({ type: 'done', indices: a.map((_, i) => i), array: [...a], message: '排序完成' });
+          return steps;
+        }
+      },
+      merge: {
+        label: '4. 合併排序',
+        english: 'Merge Sort',
+        desc: '先分割成更小的子陣列，再依序合併成排序好的陣列。',
+        principle: '基本原理：使用分治法，將陣列不斷切半直到單一元素，再將左右兩個已排序子陣列比較後合併。',
+        bullets: ['先遞迴切半', '切到每組只剩一個元素', '比較左右子陣列的前端元素', '逐步合併為完整有序陣列'],
+        complexity: '時間複雜度：最佳 / 平均 / 最差皆為 O(n log n)；空間複雜度：O(n)',
+        generator(arr) {
+          const a = [...arr];
+          const steps = [];
+          function mergeSort(left, right) {
+            if (left >= right) return;
+            const mid = Math.floor((left + right) / 2);
+            steps.push({ type: 'mark', indices: range(left, right), array: [...a], message: `分割區間 ${left} ~ ${right}` });
+            mergeSort(left, mid);
+            mergeSort(mid + 1, right);
+            merge(left, mid, right);
+          }
+          function merge(left, mid, right) {
+            const leftArr = a.slice(left, mid + 1);
+            const rightArr = a.slice(mid + 1, right + 1);
+            let i = 0, j = 0, k = left;
+            while (i < leftArr.length && j < rightArr.length) {
+              steps.push({ type: 'compare', indices: [k], array: [...a], message: `比較左半 ${leftArr[i]} 與右半 ${rightArr[j]}` });
+              if (leftArr[i] <= rightArr[j]) {
+                a[k] = leftArr[i++];
+              } else {
+                a[k] = rightArr[j++];
+              }
+              steps.push({ type: 'insert', indices: [k], array: [...a], message: `寫入索引 ${k}` });
+              k++;
+            }
+            while (i < leftArr.length) {
+              a[k] = leftArr[i++];
+              steps.push({ type: 'insert', indices: [k], array: [...a], message: `左半剩餘元素寫入索引 ${k}` });
+              k++;
+            }
+            while (j < rightArr.length) {
+              a[k] = rightArr[j++];
+              steps.push({ type: 'insert', indices: [k], array: [...a], message: `右半剩餘元素寫入索引 ${k}` });
+              k++;
+            }
+            steps.push({ type: 'sorted', indices: range(left, right), array: [...a], message: `區間 ${left} ~ ${right} 合併完成` });
+          }
+          mergeSort(0, a.length - 1);
+          steps.push({ type: 'done', indices: a.map((_, i) => i), array: [...a], message: '排序完成' });
+          return steps;
+        }
+      },
+      heap: {
+        label: '5. 堆積排序',
+        english: 'Heap Sort',
+        desc: '先把資料建成最大堆，然後反覆把堆頂最大值移到尾端。',
+        principle: '基本原理：利用二元堆結構建立最大堆，根節點會是最大值。每輪把根與尾端交換，再縮小範圍重建堆。',
+        bullets: ['先建立最大堆', '最大值會位在根節點', '將根節點與尾端交換', '縮小堆大小並重新 heapify'],
+        complexity: '時間複雜度：最佳 / 平均 / 最差皆為 O(n log n)；空間複雜度：O(1)',
+        generator(arr) {
+          const a = [...arr];
+          const steps = [];
+          const n = a.length;
+          function heapify(size, root) {
+            let largest = root;
+            const left = 2 * root + 1;
+            const right = 2 * root + 2;
+            if (left < size) {
+              steps.push({ type: 'compare', indices: [largest, left], array: [...a], message: `比較根 ${largest} 與左子節點 ${left}` });
+              if (a[left] > a[largest]) largest = left;
+            }
+            if (right < size) {
+              steps.push({ type: 'compare', indices: [largest, right], array: [...a], message: `比較目前最大索引 ${largest} 與右子節點 ${right}` });
+              if (a[right] > a[largest]) largest = right;
+            }
+            if (largest !== root) {
+              [a[root], a[largest]] = [a[largest], a[root]];
+              steps.push({ type: 'swap', indices: [root, largest], array: [...a], message: `交換索引 ${root} 與 ${largest}` });
+              heapify(size, largest);
+            }
+          }
+          for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+            steps.push({ type: 'mark', indices: [i], array: [...a], message: `自索引 ${i} 開始建立最大堆` });
+            heapify(n, i);
+          }
+          for (let end = n - 1; end > 0; end--) {
+            [a[0], a[end]] = [a[end], a[0]];
+            steps.push({ type: 'swap', indices: [0, end], array: [...a], message: `將最大值移到索引 ${end}` });
+            steps.push({ type: 'sorted', indices: [end], array: [...a], message: `索引 ${end} 已定位` });
+            heapify(end, 0);
+          }
+          steps.push({ type: 'done', indices: a.map((_, i) => i), array: [...a], message: '排序完成' });
+          return steps;
+        }
+      }
+    };
+
+    const state = {
+      current: 'bubble',
+      original: [],
+      steps: [],
+      stepIndex: 0,
+      timer: null,
+      compareCount: 0,
+      swapCount: 0,
+      running: false
+    };
+
+    let benchmarkChart = null;
+
+    const els = {
+      algoList: document.getElementById('algoList'),
+      algoType: document.getElementById('algoType'),
+      algoName: document.getElementById('algoName'),
+      algoDesc: document.getElementById('algoDesc'),
+      algoPrinciple: document.getElementById('algoPrinciple'),
+      algoBullets: document.getElementById('algoBullets'),
+      algoComplexity: document.getElementById('algoComplexity'),
+      bars: document.getElementById('bars'),
+      steps: document.getElementById('steps'),
+      compareCount: document.getElementById('compareCount'),
+      swapCount: document.getElementById('swapCount'),
+      stepCount: document.getElementById('stepCount'),
+      statusText: document.getElementById('statusText'),
+      sizeInput: document.getElementById('sizeInput'),
+      speedInput: document.getElementById('speedInput'),
+      modeSelect: document.getElementById('modeSelect'),
+      customInput: document.getElementById('customInput'),
+      generateBtn: document.getElementById('generateBtn'),
+      startBtn: document.getElementById('startBtn'),
+      stepBtn: document.getElementById('stepBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+      benchmarkStatus: document.getElementById('benchmarkStatus')
+    };
+
+    function range(start, end) {
+      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    }
+
+    function createArray() {
+      const custom = els.customInput.value.trim();
+      if (custom) {
+        const parsed = custom.split(',').map(v => Number(v.trim())).filter(v => !Number.isNaN(v));
+        if (parsed.length >= 3) return parsed.slice(0, 30);
+      }
+
+      const size = Math.min(30, Math.max(5, Number(els.sizeInput.value) || 12));
+      const mode = els.modeSelect.value;
+      let arr = Array.from({ length: size }, () => Math.floor(Math.random() * 90) + 10);
+
+      if (mode === 'nearly') {
+        arr.sort((a, b) => a - b);
+        for (let i = 0; i < Math.max(1, Math.floor(size / 5)); i++) {
+          const x = Math.floor(Math.random() * size);
+          const y = Math.floor(Math.random() * size);
+          [arr[x], arr[y]] = [arr[y], arr[x]];
+        }
+      } else if (mode === 'reverse') {
+        arr.sort((a, b) => b - a);
+      }
+      return arr;
+    }
+
+    function renderMenu() {
+      els.algoList.innerHTML = '';
+      Object.entries(algorithms).forEach(([key, algo]) => {
+        const btn = document.createElement('button');
+        btn.className = 'algo-btn' + (key === state.current ? ' active' : '');
+        btn.innerHTML = `<strong>${algo.label}</strong><div class="sub">${algo.english}</div>`;
+        btn.addEventListener('click', () => switchAlgorithm(key));
+        els.algoList.appendChild(btn);
+      });
+    }
+
+    function switchAlgorithm(key) {
+      stopRun();
+      state.current = key;
+      const algo = algorithms[key];
+      els.algoType.textContent = algo.english;
+      els.algoName.textContent = algo.label;
+      els.algoDesc.textContent = algo.desc;
+      els.algoPrinciple.textContent = algo.principle;
+      els.algoBullets.innerHTML = algo.bullets.map(item => `<li>${item}</li>`).join('');
+      els.algoComplexity.textContent = algo.complexity;
+      renderMenu();
+      resetData();
+    }
+
+    function resetMetrics() {
+      state.compareCount = 0;
+      state.swapCount = 0;
+      state.stepIndex = 0;
+      els.compareCount.textContent = '0';
+      els.swapCount.textContent = '0';
+      els.stepCount.textContent = '0';
+      els.statusText.textContent = '待機';
+      els.steps.innerHTML = '';
+    }
+
+    function renderBars(array, highlight = [], type = '') {
+      els.bars.innerHTML = '';
+      const max = Math.max(...array, 1);
+      array.forEach((value, index) => {
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        if (highlight.includes(index)) {
+          if (type === 'compare') bar.classList.add('compare');
+          else if (type === 'done' || type === 'sorted') bar.classList.add('sorted');
+          else bar.classList.add('active');
+        }
+        bar.style.height = `${(value / max) * 100}%`;
+        bar.innerHTML = `<span>${value}</span>`;
+        els.bars.appendChild(bar);
+      });
+    }
+
+    function appendStep(message) {
+      const div = document.createElement('div');
+      div.className = 'step-item';
+      div.textContent = `${state.stepIndex}. ${message}`;
+      els.steps.prepend(div);
+    }
+
+    function loadSteps() {
+      const algo = algorithms[state.current];
+      state.steps = algo.generator([...state.original]);
+    }
+
+    function applyStep() {
+      if (state.stepIndex >= state.steps.length) {
+        stopRun();
+        els.statusText.textContent = '完成';
+        return;
+      }
+      const step = state.steps[state.stepIndex];
+      state.stepIndex += 1;
+
+      if (step.type === 'compare') state.compareCount += 1;
+      if (['swap', 'insert'].includes(step.type)) state.swapCount += 1;
+
+      els.compareCount.textContent = state.compareCount;
+      els.swapCount.textContent = state.swapCount;
+      els.stepCount.textContent = state.stepIndex;
+      els.statusText.textContent = step.message;
+      renderBars(step.array, step.indices, step.type);
+      appendStep(step.message);
+
+      if (step.type === 'done') {
+        stopRun();
+        els.statusText.textContent = '完成';
+      }
+    }
+
+    function startRun() {
+      if (state.running) return;
+      if (!state.steps.length) loadSteps();
+      state.running = true;
+      const speed = Math.max(50, Number(els.speedInput.value) || 260);
+      state.timer = setInterval(() => {
+        if (state.stepIndex >= state.steps.length) {
+          stopRun();
+          return;
+        }
+        applyStep();
+      }, speed);
+    }
+
+    function stopRun() {
+      state.running = false;
+      if (state.timer) clearInterval(state.timer);
+      state.timer = null;
+    }
+
+    function resetData() {
+      stopRun();
+      state.original = createArray();
+      resetMetrics();
+      state.steps = [];
+      renderBars(state.original);
+    }
+
+    function benchmarkRun(sortKey, input, repeats = 4) {
+      const algo = algorithms[sortKey];
+      let total = 0;
+      for (let i = 0; i < repeats; i++) {
+        const data = [...input];
+        const start = performance.now();
+        algo.generator(data);
+        total += performance.now() - start;
+      }
+      return +(total / repeats).toFixed(3);
+    }
+
+    function runBenchmark() {
+      if (typeof Chart === 'undefined') {
+        els.benchmarkStatus.textContent = '圖表函式庫尚未載入，請稍後再試';
+        return;
+      }
+
+      const sizes = [10, 30, 60, 100, 200];
+      const keys = Object.keys(algorithms);
+      const datasets = keys.map((key, index) => ({
+        label: algorithms[key].english,
+        data: sizes.map((size) => {
+          const base = Array.from({ length: size }, () => Math.floor(Math.random() * 1000));
+          return benchmarkRun(key, base, 4);
+        }),
+        tension: 0.28,
+        borderWidth: 2,
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        fill: false,
+        borderColor: ['#00e5ff', '#4f7cff', '#a855f7', '#22c55e', '#ffb020'][index],
+        backgroundColor: ['#00e5ff', '#4f7cff', '#a855f7', '#22c55e', '#ffb020'][index]
+      }));
+
+      const ctx = document.getElementById('chart');
+      if (!ctx) return;
+
+      if (benchmarkChart) benchmarkChart.destroy();
+
+      benchmarkChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: sizes.map((n) => `n=${n}`),
+          datasets
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              labels: { color: '#dce9ff' }
+            },
+            title: {
+              display: true,
+              text: '五種排序法平均執行時間比較',
+              color: '#eaf2ff'
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#9fb7d9' },
+              grid: { color: 'rgba(159,183,217,0.12)' }
+            },
+            y: {
+              title: { display: true, text: '毫秒 (ms)', color: '#9fb7d9' },
+              ticks: { color: '#9fb7d9' },
+              grid: { color: 'rgba(159,183,217,0.12)' }
+            }
+          }
+        }
+      });
+
+      els.benchmarkStatus.textContent = `已完成測試：${new Date().toLocaleTimeString('zh-TW', { hour12: false })}`;
+    }
+
+    els.generateBtn.addEventListener('click', resetData);
+    els.resetBtn.addEventListener('click', resetData);
+    els.startBtn.addEventListener('click', () => {
+      if (state.stepIndex >= state.steps.length && state.steps.length) resetData();
+      loadSteps();
+      startRun();
+    });
+    els.stepBtn.addEventListener('click', () => {
+      stopRun();
+      if (!state.steps.length) loadSteps();
+      applyStep();
+    });
+
+    switchAlgorithm('bubble');
+
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+    script.onload = () => {
+      els.benchmarkStatus.textContent = '圖表模組已載入，可以開始測試';
+    };
+    document.body.appendChild(script);
+  </script>
 </body>
 </html>
